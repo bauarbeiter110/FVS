@@ -2,7 +2,7 @@
     <wb-module deploy-name="FVS">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <property name="java-output-path" value="/FVS/build/classes"/>
         <property name="context-root" value="FVS"/>
+        <property name="java-output-path" value="/FVS/build/classes"/>
     </wb-module>
 </project-modules>
