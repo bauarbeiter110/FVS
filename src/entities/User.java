@@ -1,7 +1,10 @@
 package entities;
 
 import java.io.Serializable;
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 
 /**
@@ -19,8 +22,6 @@ public class User implements Serializable {
 	private byte manager;
 
 	private String name;
-
-	private String vorname;
 
 	public User() {
 	}
@@ -49,12 +50,5 @@ public class User implements Serializable {
 		this.name = name;
 	}
 
-	public String getVorname() {
-		return this.vorname;
-	}
-
-	public void setVorname(String vorname) {
-		this.vorname = vorname;
-	}
 
 }
