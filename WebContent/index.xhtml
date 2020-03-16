@@ -6,15 +6,28 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title><ui:insert name="title">JSF Starter</ui:insert></title>
+	<title><ui:insert name="title">FVS Startseite</ui:insert></title>
 </h:head>
 <h:body>
 	<f:view>
 		<h:form>
-			<h:outputText value="Hallo JSF">Kein JSF aktiv</h:outputText>
+			<h:outputText value="Hallo JSF">Kein JSF aktiv</h:outputText>			
 			<br />
 			<br />
-			<h:button value="OK" />
+			<h:inputText id = "input" value = "#{Check.message}"/>		
+			<br />
+			<h:outputText id = "output" value = "#{Check.message}"/>
+			<f:ajax execute ="input" render="output" event = "click">	    
+			    <br />
+				<h:commandButton value="Antworten"/>
+			</f:ajax>
+			<br />
+			<br />
+			<h:outputText id="oUser" value="#{Check.user}"></h:outputText>
+			<f:ajax execute ="#{Check.user}" render="oUser" event = "click">	    
+			    <br />
+				<h:commandButton value="User laden"/>
+			</f:ajax>
 			<br />
 			<br />
 			<p>Dies ist nur HTML</p>
