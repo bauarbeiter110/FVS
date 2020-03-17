@@ -1,38 +1,35 @@
 package controller;
 import java.util.List;
+import java.util.Set;
 
 import javax.enterprise.context.*;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.metamodel.EntityType;
 
 import dao.Dao;
-import entities.User;
+import entities.*;
 
 @Named(value = "Check")
-@RequestScoped
+@ApplicationScoped
 public class Check {
 	
 	String message = "Hy";
-	Dao dao = new Dao();
 	
-	@Inject
-	private User user = new User();
-
-    public Check() {
-        super();
-        System.out.println("Check gestartet");
-    }
-    
+	private User user;
+	
+	@PersistenceContext(unitName = "fvs")
+	private EntityManager em;
+	
+	Dao dao = new Dao();
+	   
     public String getUser() {
-    	System.out.println("Load User gewählt");
-    	//List <User> users = dao.loadUsers();
-    	//if(users.isEmpty()) {
-    		return "Keine User vorhanden";
-    	//}
-    	//else {
-    	//	this.user = users.get(0);
-    	//	return user.toString();
-    	//}
+    	System.out.println("Load User gewaehlt");
+    	dao.gibMetaAus(em);
+    	System.out.println(dao.loadHaltestellen(em).toString());
+    	return "Laden erfolgreich";
     }
     public void setUser(User user) {
 		this.user = user;
