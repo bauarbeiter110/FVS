@@ -15,9 +15,10 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int id;
 
-	private byte manager;
+	private boolean manager;
 
 	private String name;
 
@@ -32,11 +33,11 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public byte getManager() {
+	public boolean getManager() {
 		return this.manager;
 	}
 
-	public void setManager(byte manager) {
+	public void setManager(boolean manager) {
 		this.manager = manager;
 	}
 

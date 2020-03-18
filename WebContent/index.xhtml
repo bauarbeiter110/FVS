@@ -29,6 +29,17 @@
 				<h:commandButton value="User laden"/>
 			</f:ajax>
 			<br />
+			
+			<h:dataTable id = "userTable" value = "#{UserEJB.getUsers()}" var = "user">
+				<h:column>
+					<f:facet name="header"> Index</f:facet>
+					<h:outputText value = "#{user.id}"/>
+				</h:column>
+				<h:column>
+					<f:facet name="header">Name</f:facet>
+					<h:outputText value = "#{user.name}"/>
+				</h:column>
+			</h:dataTable>		
 			<br />
 			<p>Dies ist nur HTML</p>
 		</h:form>
