@@ -10,20 +10,37 @@ import dao.UserDao;
 import entities.User;
 
 @Named(value = "UserEJB")
-@ApplicationScoped
+@RequestScoped
 public class UserEJB {
-	
+
 	@Inject
 	UserDao userDao;
 	
-	public List <User>getUsers(){
+	String name;
+
+	public List<User> getUsers() {
+		System.out.println("getUsers");
 		return userDao.loadUsers();
 	}
 	
 	public void add() {
-		User u = new User();
-		u.setName("John Doe");
-		userDao.saveUser(u);
+		System.out.println("Add name");
+		System.out.println("Bind name: " + this.name);
+		User u2 = new User(this.name);
+		userDao.saveUser(u2);
+		System.out.println("Bind User: " + u2.toString());
+	}
+	
+	public void delete() {
+		System.out.println("Delete ausgwaehlt");
+		// userDao.remove();
 	}
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

@@ -11,38 +11,45 @@
 <h:body>
 	<f:view>
 		<h:form>
-			<h:outputText value="Hallo JSF">Kein JSF aktiv</h:outputText>			
-			<br />
-			<br />
-			<h:inputText id = "input" value = "#{Check.message}"/>		
-			<br />
-			<h:outputText id = "output" value = "#{Check.message}"/>
-			<f:ajax execute ="input" render="output" event = "click">	    
-			    <br />
-				<h:commandButton value="Antworten"/>
+			<f:ajax render="userTable" event="click">
+				<h:dataTable id="userTable" value="#{UserEJB.getUsers()}" var="user">
+					<h:column>
+						<f:facet name="header"> Index</f:facet>
+						<h:outputText value="#{user.id}" />
+					</h:column>
+					<h:column>
+						<f:facet name="header"> Name</f:facet>
+						<h:outputText value="#{user.name}" />
+					</h:column>
+				</h:dataTable>
+				<br />
+				<h:commandButton value="User Tabelle aktualisieren" />
 			</f:ajax>
 			<br />
-			<br />
-			<h:outputText id="oUser" value="#{Check.user}"></h:outputText>
-			<f:ajax execute ="#{Check.user}" render="oUser" event = "click">	    
-			    <br />
-				<h:commandButton value="User laden"/>
-			</f:ajax>
-			<br />
-			
-			<h:dataTable id = "userTable" value = "#{UserEJB.getUsers()}" var = "user">
-				<h:column>
-					<f:facet name="header"> Index</f:facet>
-					<h:outputText value = "#{user.id}"/>
-				</h:column>
-				<h:column>
-					<f:facet name="header">Name</f:facet>
-					<h:outputText value = "#{user.name}"/>
-				</h:column>
-			</h:dataTable>		
-			<br />
-			<p>Dies ist nur HTML</p>
 		</h:form>
+
+		<br />
+		<h:form>
+			<br />
+			<h:outputLabel> Name des neuen Nutzers</h:outputLabel>
+			<br />
+			<h:message for="nameInput" />
+			<br />
+			<h:inputText id="nameInput" required="true"
+				requiredMessage="Bitte geben Sie einen Namen ein."
+				value="#{UserEJB.name}">
+			</h:inputText>
+			<h:commandButton value="User hinzufügen" action="#{UserEJB.add()}" />
+			<br />
+		</h:form>
+
+		<br />
+		<h:form>
+			<br />
+			<h:commandButton value="User löschen" action="#{UserEJB.delete()}" />
+			<br />
+		</h:form>
+
 	</f:view>
 </h:body>
 </html>

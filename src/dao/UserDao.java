@@ -16,23 +16,9 @@ public class UserDao {
 	
 	@PersistenceContext(unitName = "fvs")
 	private EntityManager em;
-		
-	public List <Haltestelle> loadHaltestellen(){
-		System.out.println("DAO Load Haltestellen");		
-		return em.createQuery("SELECT h FROM Haltestelle h",Haltestelle.class).getResultList();
-		//return null;
-	}
 	
 	public List<User> loadUsers() {
-		System.out.println("DAO Load User");
 		return em.createQuery("SELECT u FROM User u", User.class).getResultList();
-	}
-	
-	public void gibMetaAus() {
-		Set<EntityType<?>> tabellen = em.getMetamodel().getEntities();
-    	for(EntityType tabelle : tabellen) {
-    		System.out.println(tabelle.toString());
-    	}
 	}
 	
 	public void saveUser(User user) {
@@ -41,5 +27,12 @@ public class UserDao {
 	
 	public void deleteUser(User user) {
 		em.remove(user);
+	}
+	
+	public void gibMetaAus() {
+		Set<EntityType<?>> tabellen = em.getMetamodel().getEntities();
+    	for(EntityType tabelle : tabellen) {
+    		System.out.println(tabelle.toString());
+    	}
 	}
 }
