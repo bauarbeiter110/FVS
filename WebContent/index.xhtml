@@ -21,6 +21,10 @@
 						<f:facet name="header"> Name</f:facet>
 						<h:outputText value="#{user.name}" />
 					</h:column>
+					<h:column>
+						<f:facet name="header"> Manager</f:facet>
+						<h:outputText value="#{user.manager}" />
+					</h:column>
 				</h:dataTable>
 				<br />
 				<h:commandButton value="User Tabelle aktualisieren" />
@@ -30,23 +34,30 @@
 
 		<br />
 		<h:form>
-			<br />
+		<br />
 			<h:outputLabel> Name des neuen Nutzers</h:outputLabel>
-			<br />
-			<h:message for="nameInput" />
 			<br />
 			<h:inputText id="nameInput" required="true"
 				requiredMessage="Bitte geben Sie einen Namen ein."
 				value="#{UserEJB.name}">
 			</h:inputText>
 			<h:commandButton value="User hinzufügen" action="#{UserEJB.add()}" />
+			<h:messages style="color:red" />
 			<br />
 		</h:form>
 
 		<br />
 		<h:form>
+			<h:outputLabel> Bitte wählen Sie den zu löschenden User aus:</h:outputLabel>
 			<br />
-			<h:commandButton value="User löschen" action="#{UserEJB.delete()}" />
+			<f:ajax>
+				<h:selectOneMenu>
+					<f:selectItems value="#{UserEJB.getUsers()}" var="user"
+						itemLabel="#{user.name}" />
+				</h:selectOneMenu>
+				<h:commandButton value="löschen" action="#{UserEJB.delete(user)}" />
+				<br />
+			</f:ajax>
 			<br />
 		</h:form>
 

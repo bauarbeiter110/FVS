@@ -24,15 +24,21 @@ public class UserEJB {
 	}
 	
 	public void add() {
-		System.out.println("Add name");
-		System.out.println("Bind name: " + this.name);
-		User u2 = new User(this.name);
-		userDao.saveUser(u2);
-		System.out.println("Bind User: " + u2.toString());
+		System.out.println("name: " + this.name);
+		User newUser = new User(this.name);
+		System.out.println("Bind User: " + newUser.toString());
+		userDao.saveUser(newUser);
 	}
 	
-	public void delete() {
+	public void delete(User user) {
 		System.out.println("Delete ausgwaehlt");
+		System.out.println("User: " + user.toString());
+		// userDao.remove();
+	}
+	
+	public void delete(String user) {
+		System.out.println("Delete ausgwaehlt");
+		System.out.println("String: " + user);
 		// userDao.remove();
 	}
 
