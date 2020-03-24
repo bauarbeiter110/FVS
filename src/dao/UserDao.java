@@ -25,8 +25,8 @@ public class UserDao {
 		em.merge(user);
 	}
 	
-	public void deleteUser(User user) {
-		em.remove(user);
+	public void deleteUser(int userId) {
+		em.remove(em.find(User.class, userId));
 	}
 	
 	public void gibMetaAus() {
