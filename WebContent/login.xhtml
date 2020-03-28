@@ -1,0 +1,24 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:tp="http://java.sun.com/jsf/composite/tutorialspoint">
+
+<h:head>
+	<title>FVS Login</title>
+</h:head>
+
+<h:body>
+	<h2>Bitte geben Sie ihren Namen ein</h2>
+	<h:form>
+		<h:inputText id="inName" value="#{SessionUser.name}" />
+		<h:commandButton value="Einloggen" action="#{SessionUser.login}">
+			<f:ajax execute="inName" event="click" />
+		</h:commandButton>
+		<br />
+	</h:form>
+</h:body>
+</html>

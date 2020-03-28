@@ -6,43 +6,45 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title><ui:insert name="title">FVS Startseite</ui:insert></title>
+	<title><ui:insert name="title">FVS User</ui:insert></title>
 </h:head>
 <h:body>
 	<f:view>
-		<h:form>
-			<f:ajax render="userTable" event="click">
-				<h:dataTable id="userTable" value="#{UserEJB.getUsers()}" var="user">
-					<h:column>
-						<f:facet name="header"> Index</f:facet>
-						<h:outputText value="#{user.id}" />
-					</h:column>
-					<h:column>
-						<f:facet name="header"> Name</f:facet>
-						<h:outputText value="#{user.name}" />
-					</h:column>
-					<h:column>
-						<f:facet name="header"> Manager</f:facet>
-						<h:outputText value="#{user.manager}" />
-					</h:column>
-				</h:dataTable>
-				<br />
-				<h:commandButton value="User Tabelle aktualisieren" />
-			</f:ajax>
+	<h:outputLabel value = "Hallo #{SessionUser.sessionUser.name}"/>
+	<br />
+		<h:form> 
+			<h:dataTable id="userTable" value="#{UserEJB.users}" var="user">
+				<h:column>
+					<f:facet name="header"> Index</f:facet>
+					<h:outputText value="#{user.id}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header"> Name</f:facet>
+					<h:outputText value="#{user.name}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header"> Manager</f:facet>
+					<h:outputText value="#{user.manager}" />
+				</h:column>
+			</h:dataTable>
+			<br />
+			<h:commandButton value="User Tabelle aktualisieren">
+				<f:ajax render="userTable" event="click" />
+			</h:commandButton>
 			<br />
 		</h:form>
 		<br />
 		<h:form>
 			<br />
-			<f:ajax execute="nameInput"  render="deleteInput userTable" event="click">
 			<h:outputLabel> Name des neuen Nutzers</h:outputLabel>
 			<br />
 			<h:inputText id="nameInput" required="true"
 				requiredMessage="Bitte geben Sie einen Namen ein."
 				value="#{UserEJB.name}">
+				<f:ajax execute="nameInput" render="deleteInput userTable"
+					event="click" />
 			</h:inputText>
 			<h:commandButton value="User hinzufügen" action="#{UserEJB.add()}" />
-			</f:ajax>
 			<br />
 			<h:message for="nameInput" style="color:red" />
 			<br />
@@ -51,14 +53,15 @@
 		<h:form>
 			<h:outputLabel> Bitte wählen Sie den zu löschenden User aus:</h:outputLabel>
 			<br />
-			<f:ajax render="deleteInput userTable" event="click">
 			<h:selectOneMenu id="deleteInput" value="#{UserEJB.userId}">
-				<f:selectItems value="#{UserEJB.getUsers()}" var="OneUser"
-					itemLabel="#{OneUser.name}" itemValue="#{OneUser.id}">
+				<f:selectItems id="deleteItems" value="#{UserEJB.users}"
+					var="OneUser" itemLabel="#{OneUser.name}" itemValue="#{OneUser.id}">
 				</f:selectItems>
 			</h:selectOneMenu>
-			<h:commandButton value="löschen" action="#{UserEJB.delete()}" />
-			</f:ajax>
+			<h:commandButton value="löschen" action="#{UserEJB.delete()}">
+				<f:ajax execute="deleteInput" render="@all"
+					event="click" />
+			</h:commandButton>
 			<br />
 			<h:message for="deleteInput" style="color:red" />
 		</h:form>

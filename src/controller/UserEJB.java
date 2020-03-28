@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.*;
-import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -34,6 +33,7 @@ public class UserEJB {
 		User newUser = new User(this.name);
 		System.out.println("Bind User: " + newUser.toString());
 		userDao.saveUser(newUser);
+		users = userDao.loadUsers();
 	}
 
 	public void delete() {
@@ -42,8 +42,8 @@ public class UserEJB {
 		for (User user : users) {
 			if(user.getId()==this.userId) {
 				System.out.println(user.toString());
-				userDao.deleteUser(userId);
-				
+				userDao.deleteUser(userId);	
+				users = userDao.loadUsers();
 			}
 		}
 	}

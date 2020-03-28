@@ -29,6 +29,16 @@ public class UserDao {
 		em.remove(em.find(User.class, userId));
 	}
 	
+	public User findUserByName(String name) {
+		List <User> users = em.createQuery("SELECT u FROM User u", User.class).getResultList();
+		for(User user: users) {
+			if(user.getName().equals(name)) {
+				return user;
+			}
+		}
+		return null;
+	}
+	
 	public void gibMetaAus() {
 		Set<EntityType<?>> tabellen = em.getMetamodel().getEntities();
     	for(EntityType tabelle : tabellen) {
