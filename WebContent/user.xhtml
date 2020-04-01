@@ -10,9 +10,9 @@
 </h:head>
 <h:body>
 	<f:view>
-	<h:outputLabel value = "Hallo #{SessionUser.sessionUser.name}"/>
-	<br />
-		<h:form> 
+		<h:outputLabel value="Hallo #{SessionUser.sessionUser.name}" />
+		<br />
+		<h:form>
 			<h:dataTable id="userTable" value="#{UserEJB.users}" var="user">
 				<h:column>
 					<f:facet name="header"> Index</f:facet>
@@ -38,32 +38,33 @@
 			<br />
 			<h:outputLabel> Name des neuen Nutzers</h:outputLabel>
 			<br />
-			<h:inputText id="nameInput" required="true"
+			<h:inputText id="InName" required="true"
 				requiredMessage="Bitte geben Sie einen Namen ein."
 				value="#{UserEJB.name}">
-				<f:ajax execute="nameInput" render="deleteInput userTable"
-					event="click" />
+				<f:ajax execute="InName" render="InDelete userTable" event="click" />
 			</h:inputText>
 			<h:commandButton value="User hinzufügen" action="#{UserEJB.add()}" />
 			<br />
-			<h:message for="nameInput" style="color:red" />
+			<h:message for="InName" style="color:red" />
 			<br />
 		</h:form>
 		<br />
 		<h:form>
 			<h:outputLabel> Bitte wählen Sie den zu löschenden User aus:</h:outputLabel>
 			<br />
-			<h:selectOneMenu id="deleteInput" value="#{UserEJB.userId}">
-				<f:selectItems id="deleteItems" value="#{UserEJB.users}"
+			<h:selectOneMenu id="InDelete" value="#{UserEJB.userId}">
+				<f:selectItems id="InDeleteItems" value="#{UserEJB.users}"
 					var="OneUser" itemLabel="#{OneUser.name}" itemValue="#{OneUser.id}">
 				</f:selectItems>
 			</h:selectOneMenu>
 			<h:commandButton value="löschen" action="#{UserEJB.delete()}">
-				<f:ajax execute="deleteInput" render="@all"
-					event="click" />
+				<f:ajax execute="InDelete" render="@all" event="click" />
 			</h:commandButton>
 			<br />
-			<h:message for="deleteInput" style="color:red" />
+			<h:message for="InDelete" style="color:red" />
+		</h:form>
+		<h:form>
+			<h:commandButton value="Zurück" action="navigation.xhtml" />
 		</h:form>
 	</f:view>
 </h:body>

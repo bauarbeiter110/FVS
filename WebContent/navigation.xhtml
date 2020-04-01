@@ -12,14 +12,12 @@
 </h:head>
 
 <h:body>
-	<h2>Bitte geben Sie ihren Namen ein</h2>
+	<h2>Wählen Sie ihr Ziel aus</h2>
 	<h:form>
-		<h:inputText id="InName" value="#{SessionUser.name}"/>
-		<h:commandButton value="Einloggen" action="#{SessionUser.login}">
-			<f:ajax execute="InName" event="click" />
-		</h:commandButton>
+		<h:commandButton value="User" action="user.xhtml" />
 		<br />
-		<h:message for="InName" style="color:red" />
+		<br />
+		<h:commandButton value="Haltestellen" action="haltestelle.xhtml" />
 	</h:form>
 </h:body>
 </html>
