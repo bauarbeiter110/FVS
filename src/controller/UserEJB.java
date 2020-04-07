@@ -37,7 +37,6 @@ public class UserEJB {
 	}
 
 	public void delete() {
-		System.out.println("Delete ausgwaehlt");
 		System.out.println("Bind: " + this.userId);
 		for (User user : users) {
 			if(user.getId()==this.userId) {

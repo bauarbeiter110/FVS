@@ -18,7 +18,7 @@ public class HaltestelleDao implements Serializable {
 	@PersistenceContext(unitName = "fvs")
 	private EntityManager em;
 	
-	public List<Haltestelle> loadUsers() {
+	public List<Haltestelle> loadHaltestellen() {
 		return em.createQuery("SELECT h FROM Haltestelle h", Haltestelle.class).getResultList();
 	}
 	
@@ -26,7 +26,7 @@ public class HaltestelleDao implements Serializable {
 		em.merge(haltestelle);
 	}
 	
-	public void deleteUser(int userId) {
-		em.remove(em.find(Haltestelle.class, userId));
+	public void deleteHaltestelle(int haltestelleId) {
+		em.remove(em.find(Haltestelle.class, haltestelleId));
 	}	
 }

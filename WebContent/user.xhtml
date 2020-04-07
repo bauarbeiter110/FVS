@@ -41,7 +41,7 @@
 			<h:inputText id="InName" required="true"
 				requiredMessage="Bitte geben Sie einen Namen ein."
 				value="#{UserEJB.name}">
-				<f:ajax execute="InName" render="InDelete userTable" event="click" />
+				<f:ajax execute="InName" render="InName InDelete userTable" event="click" />
 			</h:inputText>
 			<h:commandButton value="User hinzufügen" action="#{UserEJB.add()}" />
 			<br />
