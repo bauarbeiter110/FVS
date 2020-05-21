@@ -6,7 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import dao.UserDao;
-import entities.User;
+import dto.UserDTO;
 
 import javax.enterprise.context.*;
 
@@ -20,15 +20,15 @@ public class SessionUser implements Serializable {
 	@Inject
 	UserDao userDao;
 
-	User sessionUser;
+	UserDTO sessionUser;
 
 	public String login() {
-		User user = userDao.findUserByName(name);
+		UserDTO user = userDao.findUserByName(name);
 		if (user == null) {
 			System.out.println("User nicht gefunden");
 			return "LoginFail";
 		}
-		sessionUser=user;
+		sessionUser = user;
 		return "LoginSuccess";
 	}
 
@@ -40,11 +40,11 @@ public class SessionUser implements Serializable {
 		this.name = name;
 	}
 
-	public User getSessionUser() {
+	public UserDTO getSessionUser() {
 		return sessionUser;
 	}
 
-	public void setSessionUser(User sessionUser) {
+	public void setSessionUser(UserDTO sessionUser) {
 		this.sessionUser = sessionUser;
 	}
 

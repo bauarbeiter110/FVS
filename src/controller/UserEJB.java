@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import dao.UserDao;
-import entities.User;
+import dto.UserDTO;
 
 @Named(value = "UserEJB")
 @RequestScoped
@@ -17,34 +17,31 @@ public class UserEJB {
 	@Inject
 	UserDao userDao;
 
+	// Variablen auf die von der xhtml zugegriffen wird
 	String name;
-	int userId;
+	int userId;	
+	List<UserDTO> users;
 	
-	List<User> users;
-	
-
+	// Beim Seitenaufbau immer durchgeführt.
 	@PostConstruct
 	public void init() {
 		users = userDao.loadUsers();
 	}
 
+	/** benötigt gebundenen Eingabeparamter #{UserEJB.name}
+	 *  Ergänzt einen neuen User in die Datenbank mit "name"
+	 */
 	public void add() {
-		System.out.println("name: " + this.name);
-		User newUser = new User(this.name);
-		System.out.println("Bind User: " + newUser.toString());
-		userDao.saveUser(newUser);
+		userDao.saveUser(this.name);
 		users = userDao.loadUsers();
 	}
 
+	/** benötigt gebundenen Eingabeparameter #{UserEJB.userID}
+	 *  Löscht User mit ausgewählter "userID" aus der Datanbank
+	 */
 	public void delete() {
-		System.out.println("Bind: " + this.userId);
-		for (User user : users) {
-			if(user.getId()==this.userId) {
-				System.out.println(user.toString());
-				userDao.deleteUser(userId);	
-				users = userDao.loadUsers();
-			}
-		}
+		userDao.deleteUser(userId);	
+		users = userDao.loadUsers();
 	}
 
 	public String getName() {
@@ -55,11 +52,11 @@ public class UserEJB {
 		this.name = name;
 	}
 	
-	public List<User> getUsers() {
+	public List<UserDTO> getUsers() {
 		return users;
 	}
 	
-	public void setUsers(List<User> users) {
+	public void setUsers(List<UserDTO> users) {
 		this.users = users;
 	}
 

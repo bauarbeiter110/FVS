@@ -8,6 +8,7 @@ import javax.ejb.Stateless;
 import javax.persistence.*;
 import javax.persistence.metamodel.EntityType;
 
+import dto.UserDTO;
 import entities.*;
 
 @Stateless
@@ -17,23 +18,41 @@ public class UserDao {
 	@PersistenceContext(unitName = "fvs")
 	private EntityManager em;
 	
-	public List<User> loadUsers() {
-		return em.createQuery("SELECT u FROM User u", User.class).getResultList();
+	/**Lade alle User aus der DB
+	 * @return Liste mit UserDTO der user-Tabelle
+	 */
+	public List<UserDTO> loadUsers() {
+		List<UserDTO> users = em.createQuery("SELECT u FROM User u", UserDTO.class).getResultList();
+		return users;		
 	}
 	
-	public void saveUser(User user) {
-		em.merge(user);
+	/**Speichere einen User mit diesem Namen ab. Entweder wird er neu erstellt, oder ein vorhandener abgeändert
+	 * @param name wird verglichen mit Inhalt von User.name
+	 */
+	public void saveUser(String name) {
+		List <User> users = em.createQuery("SELECT u FROM User u", User.class).getResultList();
+		boolean changeUser = false;
+		for(User user: users) {
+			if(user.getName().equals(name)) {		
+				em.merge(user);
+				changeUser = true;
+			}
+		}
+	// Der User wurde nicht im Persistenz-Kontext gefunden. Es ist ein neuer User
+		if (changeUser == false) {
+			em.merge(new User(name));
+		}	
 	}
 	
 	public void deleteUser(int userId) {
 		em.remove(em.find(User.class, userId));
 	}
 	
-	public User findUserByName(String name) {
+	public UserDTO findUserByName(String name) {
 		List <User> users = em.createQuery("SELECT u FROM User u", User.class).getResultList();
 		for(User user: users) {
 			if(user.getName().equals(name)) {
-				return user;
+				return new UserDTO(user.getId(), user.getManager(), user.getName());
 			}
 		}
 		return null;
