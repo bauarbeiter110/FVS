@@ -46,18 +46,18 @@
 			<br />
 		</h:form>
 		<h:form>
-			<h:outputLabel> Bitte wählen Sie die zu löschende Haltestelle aus:</h:outputLabel>
+			<h:outputLabel> Bitte wählen Sie eine Haltestelle aus, deren Linien sie sehen wollen:</h:outputLabel>
 			<br />
-			<h:selectOneMenu id="InDelete" value="#{HaltestelleEJB.haltestelleId}">
-				<f:selectItems id="InDeleteItems" value="#{HaltestelleEJB.haltestellen}"
-					var="OneHaltestelle" itemLabel="#{OneHaltestelle.name}" itemValue="#{OneHaltestelle.id}">
+			<h:selectOneMenu id="InLinie" value="#{FahrplanEJB.fahrplanId}">
+				<f:selectItems id="InLinienItems" value="#{HaltestelleEJB.haltestellen}"
+					var="OneLinie" itemLabel="#{OneLinie.name}" itemValue="#{OneLinie.id}">
 				</f:selectItems>
 			</h:selectOneMenu>
-			<h:commandButton value="löschen" action="#{HaltestelleEJB.delete()}">
-				<f:ajax execute="InDelete" render="@all" event="click" />
+			<h:commandButton value="auswählen" action="#{FahrplanEJB.getFahrplanById()}">
+				<f:ajax execute="InLinie" render="InLinie" event="click" />
 			</h:commandButton>
 			<br />
-			<h:message for="InDelete" style="color:red" />
+			<h:message for="InHaltestellen" style="color:red" />
 		</h:form>
 		<h:form>
 			<h:commandButton value="Zurück" action="navigation.xhtml" />

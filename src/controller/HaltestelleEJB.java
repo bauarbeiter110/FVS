@@ -42,7 +42,6 @@ public class HaltestelleEJB {
 	
 	public String getHaltestellenById(){
 		//Weiterleitung an die Haltestellenübersicht einer Linie/ haltestelleId ist in diesem Fall die ID der Fahrplanes
-		System.out.println("FahrplanId " + haltestelleId);
 		haltestellen = verbindungDao.getHaltestellenByFahrplanId(haltestelleId);	
 		return "haltestelle.xhtml";
 	}

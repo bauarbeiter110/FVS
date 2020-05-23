@@ -9,6 +9,7 @@ import javax.inject.Named;
 
 import dao.FahrplanDao;
 import dao.UserDao;
+import dao.VerbindungDao;
 import dto.FahrplanDTO;
 
 @Named(value = "FahrplanEJB")
@@ -17,6 +18,9 @@ public class FahrplanEJB {
 
 	@Inject
 	FahrplanDao fahrplanDao;
+	
+	@Inject
+	VerbindungDao verbindungDao;
 
 	// Variablen auf die von der xhtml zugegriffen wird
 	String linienname;
@@ -34,13 +38,11 @@ public class FahrplanEJB {
 		fahrplaene = fahrplanDao.loadFahrplaene();
 	}
 
-	public void delete() {
-		fahrplanDao.deleteFahrplan(fahrplanId);	
-		fahrplaene = fahrplanDao.loadFahrplaene();
-	}
 	
-	public void loadHaltestellen() {
-		System.out.println(fahrplanId);
+	public String getFahrplanById(){
+		//Weiterleitung an die Fahrplanübersich einer Haltestelle/ fahrplanId ist in diesem Fall die ID der Haltestelle
+		fahrplaene = verbindungDao.getFarhplaeneByHaltestelleId(fahrplanId);	
+		return "fahrplan.xhtml";
 	}
 
 	public String getLinienname() {
