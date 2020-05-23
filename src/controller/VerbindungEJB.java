@@ -69,6 +69,7 @@ public class VerbindungEJB {
 					}
 				}
 			} else if (verbindungen.get(i).getZiel().getId() == ursprungId) {
+				ver2.add(verbindungen.get(i));
 				for (int j = 0; j < halt.size(); j++) {
 					if (verbindungen.get(i).getUrsprung().getId() == halt.get(j).getId()) {
 						halt.remove(j);
@@ -77,12 +78,13 @@ public class VerbindungEJB {
 			}
 		}
 		verbindungen = ver2;
-		return "verbindung.xhtml";
+		return "verbindungSpeziell.xhtml";
 	}
 
 	public void addVerbindung() {
 		System.out.println("Start: " + haltDao.findHaltestelleById(ursprungId).getName());
 		System.out.println("Ziel: " + haltDao.findHaltestelleById(zielId).getName());
+		@SuppressWarnings("deprecation")
 		Time t = new Time(0, min, 0);
 		System.out.println("Dauer " + t);
 		VerbindungDTO dto = new VerbindungDTO(t, haltDao.findHaltestelleById(ursprungId), haltDao.findHaltestelleById(zielId));
@@ -91,7 +93,7 @@ public class VerbindungEJB {
 	
 	public String zurueck() {
 		init();
-		return "verbindungAll.xhtml";
+		return "verbindungUebersicht.xhtml";
 	}
 
 	public int getUrsprungId() {
