@@ -4,6 +4,8 @@
 	<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 	<jta-data-source>jdbc_fvs</jta-data-source>
 	<class>entities.Fahrplan</class>
+	<class>entities.FahrplanVerbindung</class>
+	<class>entities.FahrplanVerbindungPK</class>
 	<class>entities.Haltestelle</class>
 	<class>entities.User</class>
 	<class>entities.Verbindung</class>

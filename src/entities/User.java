@@ -23,14 +23,8 @@ public class User implements Serializable {
 
 	public User() {
 	}
-	
+
 	public User(String name) {
-		this.name = name;
-	}
-	
-	public User(int id, boolean manager, String name) {
-		this.id = id;
-		this.manager = manager;
 		this.name = name;
 	}
 

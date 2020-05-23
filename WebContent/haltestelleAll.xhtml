@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title><ui:insert name="title">FVS User</ui:insert></title>
+</h:head>
+<h:body>
+	<f:view>
+		<h:outputLabel value="Hallo #{SessionUser.sessionUser.name}" />
+		<br />
+		<h:form>
+			<h:dataTable id="haltestellenTable"
+				value="#{HaltestelleEJB.haltestellen}" var="haltestelle">
+				<h:column>
+					<f:facet name="header"> Index</f:facet>
+					<h:outputText value="#{haltestelle.id}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header"> Name</f:facet>
+					<h:outputText value="#{haltestelle.name}" />
+				</h:column>
+			</h:dataTable>
+			<br />
+			<h:commandButton value="Haltestellen Tabelle aktualisieren">
+				<f:ajax render="haltestellenTable" event="click" />
+			</h:commandButton>
+			<br />
+		</h:form>
+		<br />
+		<h:form>
+			<br />
+			<h:outputLabel> Name der neuen Halltestelle</h:outputLabel>
+			<br />
+			<h:inputText id="InName" required="true"
+				requiredMessage="Bitte geben Sie einen Namen ein."
+				value="#{HaltestelleEJB.name}">
+				<f:ajax execute="InName" render="haltestellenTable" event="click" />
+			</h:inputText>
+			<h:commandButton value="Haltestelle hinzufügen" action="#{HaltestelleEJB.add()}" />
+			<br />
+			<h:message for="InName" style="color:red" />
+			<br />
+		</h:form>
+		<h:form>
+			<h:outputLabel> Bitte wählen Sie die zu löschende Haltestelle aus:</h:outputLabel>
+			<br />
+			<h:selectOneMenu id="InDelete" value="#{HaltestelleEJB.haltestelleId}">
+				<f:selectItems id="InDeleteItems" value="#{HaltestelleEJB.haltestellen}"
+					var="OneHaltestelle" itemLabel="#{OneHaltestelle.name}" itemValue="#{OneHaltestelle.id}">
+				</f:selectItems>
+			</h:selectOneMenu>
+			<h:commandButton value="löschen" action="#{HaltestelleEJB.delete()}">
+				<f:ajax execute="InDelete" render="@all" event="click" />
+			</h:commandButton>
+			<br />
+			<h:message for="InDelete" style="color:red" />
+		</h:form>
+		<h:form>
+			<h:commandButton value="Zurück" action="navigation.xhtml" />
+		</h:form>
+	</f:view>
+</h:body>
+</html>

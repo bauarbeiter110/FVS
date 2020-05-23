@@ -3,7 +3,6 @@ package entities;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Time;
-import java.util.List;
 
 
 /**
@@ -20,10 +19,6 @@ public class Verbindung implements Serializable {
 	private int id;
 
 	private Time dauer;
-
-	//bi-directional many-to-many association to Fahrplan
-	@ManyToMany(mappedBy="verbindungen")
-	private List<Fahrplan> fahrplaene;
 
 	//uni-directional many-to-one association to Haltestelle
 	@ManyToOne
@@ -52,14 +47,6 @@ public class Verbindung implements Serializable {
 
 	public void setDauer(Time dauer) {
 		this.dauer = dauer;
-	}
-
-	public List<Fahrplan> getFahrplaene() {
-		return this.fahrplaene;
-	}
-
-	public void setFahrplaene(List<Fahrplan> fahrplaene) {
-		this.fahrplaene = fahrplaene;
 	}
 
 	public Haltestelle getUrsprung() {

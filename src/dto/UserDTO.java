@@ -3,6 +3,8 @@ package dto;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import entities.User;
+
 @Stateless
 @LocalBean
 public class UserDTO {
@@ -16,10 +18,10 @@ public class UserDTO {
 	public UserDTO() {
 	}
 	
-	public UserDTO(int id, boolean manager, String name) {
-		this.id = id;
-		this.manager = manager;
-		this.name = name;
+	public UserDTO(User us) {
+		this.id = us.getId();
+		this.manager = us.getManager();
+		this.name = us.getName();
 	}
 	
 	public int getId() {

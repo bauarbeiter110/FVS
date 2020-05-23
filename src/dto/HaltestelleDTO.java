@@ -3,6 +3,8 @@ package dto;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
+import entities.Haltestelle;
+
 @Stateless
 @LocalBean
 public class HaltestelleDTO {
@@ -14,13 +16,9 @@ public class HaltestelleDTO {
 	public HaltestelleDTO() {
 	}
 	
-	public HaltestelleDTO(String name) {
-		this.name = name;
-	}
-	
-	public HaltestelleDTO(int id, String name) {
-		this.id = id;
-		this.name = name;
+	public HaltestelleDTO(Haltestelle halt) {
+		this.id = halt.getId();
+		this.name = halt.getName();
 	}
 
 	public int getId() {

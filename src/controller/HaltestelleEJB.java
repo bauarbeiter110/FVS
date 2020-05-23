@@ -6,8 +6,12 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.*;
 
+import dao.FahrplanDao;
 import dao.HaltestelleDao;
+import dao.VerbindungDao;
+import dto.FahrplanDTO;
 import dto.HaltestelleDTO;
+import entities.Haltestelle;
 
 @Named(value = "HaltestelleEJB")
 @RequestScoped
@@ -15,6 +19,12 @@ public class HaltestelleEJB {
 
 	@Inject
 	HaltestelleDao halteDao;
+	
+	@Inject
+	FahrplanDao fahrplanDao;
+	
+	@Inject
+	VerbindungDao verbindungDao;
 
 	List<HaltestelleDTO> haltestellen;
 	
@@ -28,6 +38,13 @@ public class HaltestelleEJB {
 
 	public List<HaltestelleDTO> getHaltestellen() {
 		return haltestellen;
+	}
+	
+	public String getHaltestellenById(){
+		//Weiterleitung an die Haltestellenübersicht einer Linie/ haltestelleId ist in diesem Fall die ID der Fahrplanes
+		System.out.println("FahrplanId " + haltestelleId);
+		haltestellen = verbindungDao.getHaltestellenByFahrplanId(haltestelleId);	
+		return "haltestelle.xhtml";
 	}
 
 	public void setHaltestellen(List<HaltestelleDTO> haltestellen) {
@@ -43,7 +60,7 @@ public class HaltestelleEJB {
 	}
 	
 	public void add() {
-		halteDao.saveHaltestelle(this.name);
+		halteDao.createHaltestelle(this.name);
 		haltestellen = halteDao.loadHaltestellen();
 	}
 	

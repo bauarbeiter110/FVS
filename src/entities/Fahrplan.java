@@ -3,7 +3,6 @@ package entities;
 import java.io.Serializable;
 import javax.persistence.*;
 import java.sql.Time;
-import java.util.List;
 
 
 /**
@@ -33,20 +32,11 @@ public class Fahrplan implements Serializable {
 	@JoinColumn(name="Zielhaltestelle")
 	private Haltestelle Zielhaltestelle;
 
-	//bi-directional many-to-many association to Verbindung
-	@ManyToMany
-	@JoinTable(
-		name="fahrplan_verbindung"
-		, joinColumns={
-			@JoinColumn(name="Fahrplan")
-			}
-		, inverseJoinColumns={
-			@JoinColumn(name="Verbindung")
-			}
-		)
-	private List<Verbindung> verbindungen;
-
 	public Fahrplan() {
+	}
+
+	public Fahrplan(String name) {
+		this.linienname = name;
 	}
 
 	public int getId() {
@@ -87,14 +77,6 @@ public class Fahrplan implements Serializable {
 
 	public void setZielhaltestelle(Haltestelle Zielhaltestelle) {
 		this.Zielhaltestelle = Zielhaltestelle;
-	}
-
-	public List<Verbindung> getVerbindungen() {
-		return this.verbindungen;
-	}
-
-	public void setVerbindungen(List<Verbindung> verbindungen) {
-		this.verbindungen = verbindungen;
 	}
 
 }
