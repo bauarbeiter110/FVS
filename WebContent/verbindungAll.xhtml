@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title><ui:insert name="title">FVS User</ui:insert></title>
+</h:head>
+<h:body>
+	<f:view>
+		<h:outputLabel value="Hallo #{SessionUser.sessionUser.name}" />
+		<br />
+		<h:outputLabel value="Hier sind alle Verbindungen angezeigt" />
+		<h:form>
+			<h:dataTable id="verTable" value="#{VerbindungEJB.verbindungen}"
+				var="ver">
+				<h:column>
+					<f:facet name="header"> Von Haltestelle </f:facet>
+					<h:outputText value="#{ver.ursprung.name}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header"> Zu Haltestelle</f:facet>
+					<h:outputText value="#{ver.ziel.name}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header"> Dauer </f:facet>
+					<h:outputText value="#{ver.dauer}" />
+				</h:column>
+			</h:dataTable>
+			<br />
+		</h:form>
+
+		<h:form>
+			<br />
+			<h:outputLabel> Wählen Sie eine Haltestelle aus, von der eine Verbindung ausgehen soll</h:outputLabel>
+			<br />
+			<h:selectOneMenu id="InHalt" value="#{VerbindungEJB.ursprungId}">
+				<f:selectItems id="InHaltItems"
+					value="#{HaltestelleEJB.haltestellen}" var="OneHalt"
+					itemLabel="#{OneHalt.name}" itemValue="#{OneHalt.id}">
+				</f:selectItems>
+			</h:selectOneMenu>
+			<h:commandButton value="Weiter" action="#{VerbindungEJB.addUrsprung}" />
+			<br />
+			<h:message for="InName" style="color:red" />
+			<br />
+		</h:form>
+		<br />
+
+
+		<h:form>
+			<h:commandButton value="Zurück" action="navigation.xhtml" />
+		</h:form>
+	</f:view>
+</h:body>
+</html>

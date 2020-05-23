@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+	<title><ui:insert name="title">FVS User</ui:insert></title>
+</h:head>
+<h:body>
+	<f:view>
+		<h:outputLabel value="Hallo #{SessionUser.sessionUser.name}" />
+		<h:form>
+			<h:dataTable id="verTable" value="#{VerbindungEJB.verbindungen}"
+				var="ver">
+				<h:column>
+					<f:facet name="header"> Von Haltestelle </f:facet>
+					<h:outputText value="#{ver.ursprung.name}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header"> Zu Haltestelle</f:facet>
+					<h:outputText value="#{ver.ziel.name}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header"> Dauer </f:facet>
+					<h:outputText value="#{ver.dauer}" />
+				</h:column>
+			</h:dataTable>
+			<br />
+		</h:form>
+
+		<h:form>
+			<br />
+			<h:outputLabel> Wählen Sie die Haltestelle aus, zu der die Verbindung gehen soll</h:outputLabel>
+			<br />
+			<h:selectOneMenu id="InHalt" value="#{VerbindungEJB.zielId}">
+				<f:selectItems id="InHaltItems" value="#{VerbindungEJB.halt}"
+					var="OneHalt" itemLabel="#{OneHalt.name}" itemValue="#{OneHalt.id}">
+				</f:selectItems>
+			</h:selectOneMenu>
+			<h:inputText id="InTimemin" required="true" 
+				requiredMessage="Bitte geben Sie eine Fahrtdauer von Minuten ein."
+				value="#{VerbindungEJB.min}"/>
+			<h:commandButton value="Weiter" action="#{VerbindungEJB.addVerbindung()}" />
+			<br />
+			<h:message for="InHalt" style="color:red" />
+			<br />
+		</h:form>
+
+		<h:form>
+			<h:commandButton value="Zurück" action="#{VerbindungEJB.zurueck()}" />
+		</h:form>
+	</f:view>
+</h:body>
+</html>

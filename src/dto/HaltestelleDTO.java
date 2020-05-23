@@ -20,6 +20,10 @@ public class HaltestelleDTO {
 		this.id = halt.getId();
 		this.name = halt.getName();
 	}
+	
+	public Haltestelle toEntity() {
+		return new Haltestelle(this.id, this.getName());
+	}
 
 	public int getId() {
 		return this.id;

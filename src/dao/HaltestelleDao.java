@@ -29,13 +29,18 @@ public class HaltestelleDao implements Serializable {
 				.forEach((haltestelle) -> dtos.add(new HaltestelleDTO(haltestelle)));
 		return dtos;
 	}
+	
+	public HaltestelleDTO findHaltestelleById(int haltestelleId) {
+		return new HaltestelleDTO(em.find(Haltestelle.class, haltestelleId));
+	}
 
 	public void deleteHaltestelle(int haltestelleId) {
 		em.remove(em.find(Haltestelle.class, haltestelleId));
 	}
 
 	public void createHaltestelle(String name) {
-		em.merge(new Haltestelle(name));
-
+		Haltestelle halt = new Haltestelle();
+		halt.setName(name);
+		em.merge(halt);
 	}
 }

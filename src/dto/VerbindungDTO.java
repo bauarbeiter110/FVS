@@ -12,7 +12,7 @@ import entities.Haltestelle;
 import entities.Verbindung;
 
 public class VerbindungDTO {
-	
+
 	private int id;
 
 	private Time dauer;
@@ -23,14 +23,20 @@ public class VerbindungDTO {
 
 	public VerbindungDTO() {
 	}
-	
-	public VerbindungDTO(Verbindung ver, Haltestelle ursprung, Haltestelle ziel) {
+
+	public VerbindungDTO(Time dauer, HaltestelleDTO ursprung, HaltestelleDTO ziel) {
+		this.dauer = dauer;
+		this.Ursprung = ursprung;
+		this.Ziel = ziel;
+	}
+
+	public VerbindungDTO(Verbindung ver) {
 		this.id = ver.getId();
 		this.dauer = ver.getDauer();
-		this.Ursprung = new HaltestelleDTO(ursprung);
-		this.Ziel = new HaltestelleDTO(ziel);
+		this.Ursprung = new HaltestelleDTO(ver.getUrsprung());
+		this.Ziel = new HaltestelleDTO(ver.getZiel());
 	}
-	
+
 	public int getId() {
 		return this.id;
 	}
@@ -59,5 +65,8 @@ public class VerbindungDTO {
 		this.Ziel = Ziel;
 	}
 
+	public Verbindung toEntity() {
+		return new Verbindung(Ursprung.toEntity(), Ziel.toEntity(), dauer);
+	}
 
 }

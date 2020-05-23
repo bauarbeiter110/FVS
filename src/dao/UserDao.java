@@ -33,7 +33,7 @@ public class UserDao {
 	/**Speichere einen User mit diesem Namen ab. Entweder wird er neu erstellt, oder ein vorhandener abgeändert
 	 * @param name wird verglichen mit Inhalt von User.name
 	 */
-	public void saveUser(String name) {
+	public void createUser(String name) {
 		em.merge(new User(name));
 	}
 	

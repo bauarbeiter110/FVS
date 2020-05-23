@@ -32,7 +32,7 @@ public class UserEJB {
 	 *  Ergänzt einen neuen User in die Datenbank mit "name"
 	 */
 	public void add() {
-		userDao.saveUser(this.name);
+		userDao.createUser(this.name);
 		users = userDao.loadUsers();
 	}
 

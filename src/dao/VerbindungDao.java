@@ -25,6 +25,18 @@ public class VerbindungDao implements Serializable {
 
 	@PersistenceContext(unitName = "fvs")
 	private EntityManager em;
+	
+	public void saveVerbindung(VerbindungDTO ver) {
+		Verbindung verbin = ver.toEntity();
+		em.merge(verbin);
+	}
+	
+	public List<VerbindungDTO> loadVerbindung() {		
+		List<Verbindung> users = em.createQuery("SELECT v FROM Verbindung v", Verbindung.class).getResultList();
+		List<VerbindungDTO> dtos = new ArrayList <VerbindungDTO>();
+		users.forEach((ver) -> dtos.add(new VerbindungDTO(ver)));
+		return dtos;		
+	}
 
 	public List<HaltestelleDTO> getHaltestellenByFahrplanId(int fahrplanId) {
 		List<HaltestelleDTO> dtos = new ArrayList<HaltestelleDTO>();
