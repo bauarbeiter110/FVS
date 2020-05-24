@@ -40,6 +40,14 @@ public class FahrplanDTO {
 		this.linienname = name;
 	}
 
+	public FahrplanDTO(Fahrplan fahr) {
+		this.id = fahr.getId();
+		this.linienname = fahr.getLinienname();
+		this.startzeitpunkt = fahr.getStartzeitpunkt();
+		this.starthaltestelle = new HaltestelleDTO(fahr.getStarthaltestelle());
+		this.zielhaltestelle = new HaltestelleDTO(fahr.getZielhaltestelle());
+	}
+
 	public String getLinienname() {
 		return linienname;
 	}

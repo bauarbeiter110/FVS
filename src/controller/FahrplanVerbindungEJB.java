@@ -40,41 +40,55 @@ public class FahrplanVerbindungEJB implements Serializable {
 	FahrplanVerbindungDao fahrVerDao;
 
 	int lastHaltId;
-	int nextVerId;
+	int nextHaltId;
 	int linieId;
-	List<VerbindungDTO> verbindungen;
+	List<HaltestelleDTO> mglNextHalt;
 	List<HaltestelleDTO> haltestellen;
 
 	public String fahrplanUebersichtToHaltestelleSpeziell() {
-		haltestellen = verbindungDao.getHaltestellenByFahrplanId(linieId);
-		lastHaltId = haltestellen.get(haltestellen.size() - 1).getId();
-
+		haltestellen = verbindungDao.getSortedHaltestellenByFahrplanId(linieId);
+		HaltestelleDTO lastHalt = fahrDao.getFahrplanById(linieId).getZielhaltestelle();
+		lastHaltId = lastHalt.getId();
+		mglNextHalt = new ArrayList<HaltestelleDTO>();
 		// Ermittlung der möglichen nächsten Verbindungen
-		verbindungen = verbindungDao.loadVerbindung();
-		List<VerbindungDTO> zielverbindungen = new ArrayList<VerbindungDTO>();
+		List<VerbindungDTO> verbindungen = verbindungDao.loadVerbindung();
+
+		// Ermittlung der Vorletzten Haltestelle.
+		VerbindungDTO lastVer = fahrDao.getlastVerbindung(linieId);
 		for (int i = 0; i < verbindungen.size(); i++) {
-			if (verbindungen.get(i).getUrsprung().getId() == lastHaltId) {
-				zielverbindungen.add(verbindungen.get(i));
+			VerbindungDTO ver = verbindungen.get(i);
+			if (ver.getId() == lastVer.getId()) {
+				// Die betrachtete Verbindung ist die letzte Verbindung--> Nichts tun
+			} else {
+				// Die jeweilige mögliche nächste Haltestelle ist immer der Teil der
+				// betrachteten Verbindung die nicht die letzte Haltestelle ist.
+				if (ver.getUrsprung().getId() == lastHaltId) {
+					mglNextHalt.add(ver.getZiel());
+				} else if (ver.getZiel().getId() == lastHaltId) {
+					mglNextHalt.add(ver.getUrsprung());
+				}
 			}
 		}
-		verbindungen = zielverbindungen;
 		return "haltestelleSpeziell.xhtml";
+	}
+
+	public String fahrplanUebersichtToStarthaltestelle() {
+		return "starthaltestelle.xhtml";
 	}
 
 	public String addVerbindung() {
 		FahrplanDTO fahr = fahrDao.getFahrplanById(linieId);
+		VerbindungDTO ver = verbindungDao.getVerbindungByHaltestellen(haltDao.findHaltestelleById(lastHaltId),
+				haltDao.findHaltestelleById(nextHaltId));
 		FahrplanVerbindungDTO fahrVer = new FahrplanVerbindungDTO(
-				verbindungDao.getHaltestellenByFahrplanId(linieId).size(), fahr,
-				verbindungDao.getVerbindungById(nextVerId));
+				verbindungDao.getSortedHaltestellenByFahrplanId(linieId).size(), fahr, ver);
 		fahrVerDao.saveFahrplanVerbindung(fahrVer);
 		// Wenn die neue Verbindung gespeichert ist, muss für den Fahrplan noch die
 		// Zielhaltestelle aktualisiert werden.
-		if (!verbindungDao.getVerbindungById(nextVerId).getZiel().equals(fahr.getZielhaltestelle())) {
-			System.out.println(verbindungDao.getVerbindungById(nextVerId).getZiel().getName());
-			fahr.setZielhaltestelle(verbindungDao.getVerbindungById(nextVerId).getZiel());
+		if (ver.getZiel().getId() != fahr.getZielhaltestelle().getId()) {
+			fahr.setZielhaltestelle(ver.getZiel());
 		} else {
-			fahr.setZielhaltestelle(verbindungDao.getVerbindungById(nextVerId).getUrsprung());
-			System.out.println(verbindungDao.getVerbindungById(nextVerId).getUrsprung().getName());
+			fahr.setZielhaltestelle(ver.getUrsprung());
 		}
 		fahrDao.saveFahrplan(fahr);
 		return "navigation.xhtml";
@@ -92,20 +106,12 @@ public class FahrplanVerbindungEJB implements Serializable {
 		this.lastHaltId = lastHaltId;
 	}
 
-	public int getNextVerId() {
-		return nextVerId;
+	public int getNextHaltId() {
+		return nextHaltId;
 	}
 
-	public void setNextVerId(int nextVer) {
-		this.nextVerId = nextVer;
-	}
-
-	public List<VerbindungDTO> getVerbindungen() {
-		return verbindungen;
-	}
-
-	public void setVerbindungen(List<VerbindungDTO> verbindungen) {
-		this.verbindungen = verbindungen;
+	public void setNextHaltId(int nextVer) {
+		this.nextHaltId = nextVer;
 	}
 
 	public int getLinieId() {
@@ -122,5 +128,13 @@ public class FahrplanVerbindungEJB implements Serializable {
 
 	public void setHaltestellen(List<HaltestelleDTO> haltestellen) {
 		this.haltestellen = haltestellen;
+	}
+
+	public List<HaltestelleDTO> getMglNextHalt() {
+		return mglNextHalt;
+	}
+
+	public void setMglNextHalt(List<HaltestelleDTO> mglNextHalt) {
+		this.mglNextHalt = mglNextHalt;
 	}
 }

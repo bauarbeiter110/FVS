@@ -34,6 +34,17 @@ public class FahrplanVerbindungDao {
 		return dtos;
 	}
 	
+	public List<FahrplanVerbindungDTO> getFahrplanVerbindungByFahrplan(int fahrplanId){
+		List<FahrplanVerbindungDTO> fahrplanVerbindung = loadFahrplanVerbindung();
+		List<FahrplanVerbindungDTO> dtos = new ArrayList<FahrplanVerbindungDTO>();
+		for(int i = 0; i < fahrplanVerbindung.size(); i++) {
+			if(fahrplanVerbindung.get(i).getFahrplan().getId() == fahrplanId) {
+				dtos.add(fahrplanVerbindung.get(i));
+			}
+		}
+		return dtos;
+	}
+	
 	public void saveFahrplanVerbindung(FahrplanVerbindungDTO fahrVer) {
 		em.merge(fahrVer.toEntity());
 	}

@@ -34,10 +34,10 @@
 			<h:outputLabel> Wählen Sie eine Haltestelle aus zu der die Linie als nächstes fahren soll</h:outputLabel>
 			<br />
 			<h:selectOneMenu id="InVer"
-				value="#{FahrplanVerbindungEJB.nextVerId}">
+				value="#{FahrplanVerbindungEJB.nextHaltId}">
 				<f:selectItems id="InVerItems"
-					value="#{FahrplanVerbindungEJB.verbindungen}" var="ver"
-					itemLabel="#{ver.getZiel().name}" itemValue="#{ver.id}" 
+					value="#{FahrplanVerbindungEJB.mglNextHalt}" var="halt"
+					itemLabel="#{halt.name}" itemValue="#{halt.id}" 
 					/>
 			</h:selectOneMenu>
 			<h:commandButton id="Button" value="Ergänzen"

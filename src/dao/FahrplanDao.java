@@ -6,9 +6,11 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.*;
 
 import dto.FahrplanDTO;
+import dto.FahrplanVerbindungDTO;
 import dto.HaltestelleDTO;
 import dto.VerbindungDTO;
 import entities.Fahrplan;
@@ -21,6 +23,9 @@ public class FahrplanDao {
 
 	@PersistenceContext(unitName = "fvs")
 	private EntityManager em;
+	
+	@Inject
+	FahrplanVerbindungDao fahrVerDao;
 
 	public List<FahrplanDTO> loadFahrplaene() {
 		List<Fahrplan> fahrplaene = em.createQuery("SELECT f FROM Fahrplan f", Fahrplan.class).getResultList();
@@ -55,5 +60,17 @@ public class FahrplanDao {
 		HaltestelleDTO start = new HaltestelleDTO(fahr.getStarthaltestelle());
 		HaltestelleDTO ziel = new HaltestelleDTO(fahr.getZielhaltestelle());
 		return new FahrplanDTO(fahr, start, ziel);
+	}
+	
+	public VerbindungDTO getlastVerbindung(int fahrplanId){
+		FahrplanDTO fahr = getFahrplanById(fahrplanId);
+		List <FahrplanVerbindungDTO> fahrver = fahrVerDao.getFahrplanVerbindungByFahrplan(fahrplanId);
+		FahrplanVerbindungDTO dto = fahrver.get(0);
+		for(int i = 0; i < fahrver.size(); i++) {
+			if(dto.getReinfolge() < fahrver.get(i).getReinfolge()) {
+				dto = fahrver.get(i);
+			}
+		}
+		return dto.getVerbindung();
 	}
 }

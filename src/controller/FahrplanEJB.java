@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -28,6 +29,7 @@ public class FahrplanEJB {
 	int fahrplanId;	
 	List<FahrplanDTO> fahrplaene;
 	List<FahrplanDTO> linien;
+	List<FahrplanDTO> linien2;
 	
 	// Beim Seitenaufbau immer durchgeführt.
 	@PostConstruct
@@ -35,11 +37,15 @@ public class FahrplanEJB {
 		//Fahrpläne enthalten alle Fahrpläne
 		fahrplaene = fahrplanDao.loadFahrplaene();
 		
-		//linien nur Fahrpläne mit Haltestellen
+		//linien nur Fahrpläne MIT Haltestellen
+		//linien2 nur Fahrpläne OHNE Haltestellen
+		//linien und linien2 enthalten gemeinsam alle fahrplaene
 		linien = fahrplanDao.loadFahrplaene();
-		for(int i = 0; i<linien.size(); i++) {
-			if(verbindungDao.getHaltestellenByFahrplanId(linien.get(i).getId()).size() == 0){
-				linien.remove(i);
+		linien2 = new ArrayList<FahrplanDTO>();
+		for(int i = 0; i < linien.size(); i++) {
+			if(verbindungDao.getSortedHaltestellenByFahrplanId(linien.get(i).getId()).size() == 0){
+				linien2.add(linien.get(i));
+				linien.remove(i);	
 				i--;
 			}			
 		}
@@ -87,5 +93,13 @@ public class FahrplanEJB {
 
 	public void setLinien(List<FahrplanDTO> linien) {
 		this.linien = linien;
+	}
+
+	public List<FahrplanDTO> getLinien2() {
+		return linien2;
+	}
+
+	public void setLinien2(List<FahrplanDTO> linien2) {
+		this.linien2 = linien2;
 	}
 }

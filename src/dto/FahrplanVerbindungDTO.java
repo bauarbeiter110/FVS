@@ -28,6 +28,12 @@ public class FahrplanVerbindungDTO {
 		this.Verbindung = ver;
 	}
 
+	public FahrplanVerbindungDTO(FahrplanVerbindung fahrplanVerbindung) {
+		this.reinfolge = fahrplanVerbindung.getReinfolge();
+		this.Fahrplan = new FahrplanDTO(fahrplanVerbindung.getFahrplan());
+		this.Verbindung = new VerbindungDTO(fahrplanVerbindung.getVerbindung());
+	}
+
 	public int getReinfolge() {
 		return this.reinfolge;
 	}
