@@ -36,6 +36,11 @@ public class FahrplanDao {
 		}
 		return dtos;
 	}
+	
+	public void saveFahrplan(FahrplanDTO fahrplan) {
+		em.merge(fahrplan.toEntity());
+		em.flush();
+	}
 
 	public void createFahrplan(String name) {
 		em.merge(new Fahrplan(name));

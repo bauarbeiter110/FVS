@@ -20,6 +20,11 @@ public class FahrplanVerbindungPK implements Serializable {
 
 	public FahrplanVerbindungPK() {
 	}
+	public FahrplanVerbindungPK(int fahrplan, int verbindung) {
+		this.fahrplan = fahrplan;
+		this.verbindung = verbindung;
+	}
+	
 	public int getFahrplan() {
 		return this.fahrplan;
 	}

@@ -38,6 +38,14 @@ public class Fahrplan implements Serializable {
 	public Fahrplan(String name) {
 		this.linienname = name;
 	}
+	
+	public Fahrplan(int id, String linienname, Time startzeitpunkt, Haltestelle starthalt, Haltestelle zielhalt) {
+		this.id = id;
+		this.linienname = linienname;
+		this.startzeitpunkt = startzeitpunkt;
+		this.Starthaltestelle = starthalt;
+		this.Zielhaltestelle = zielhalt;
+	}
 
 	public int getId() {
 		return this.id;

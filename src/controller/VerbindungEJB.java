@@ -81,14 +81,12 @@ public class VerbindungEJB {
 		return "verbindungSpeziell.xhtml";
 	}
 
-	public void addVerbindung() {
-		System.out.println("Start: " + haltDao.findHaltestelleById(ursprungId).getName());
-		System.out.println("Ziel: " + haltDao.findHaltestelleById(zielId).getName());
+	public String addVerbindung() {
 		@SuppressWarnings("deprecation")
 		Time t = new Time(0, min, 0);
-		System.out.println("Dauer " + t);
 		VerbindungDTO dto = new VerbindungDTO(t, haltDao.findHaltestelleById(ursprungId), haltDao.findHaltestelleById(zielId));
 		verbindungDao.saveVerbindung(dto);
+		return zurueck();
 	}
 	
 	public String zurueck() {

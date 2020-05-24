@@ -66,7 +66,7 @@ public class VerbindungDTO {
 	}
 
 	public Verbindung toEntity() {
-		return new Verbindung(Ursprung.toEntity(), Ziel.toEntity(), dauer);
+		return new Verbindung(id, Ursprung.toEntity(), Ziel.toEntity(), dauer);
 	}
 
 }

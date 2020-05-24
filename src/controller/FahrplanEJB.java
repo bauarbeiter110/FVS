@@ -11,6 +11,7 @@ import dao.FahrplanDao;
 import dao.UserDao;
 import dao.VerbindungDao;
 import dto.FahrplanDTO;
+import dto.VerbindungDTO;
 
 @Named(value = "FahrplanEJB")
 @RequestScoped
@@ -26,11 +27,22 @@ public class FahrplanEJB {
 	String linienname;
 	int fahrplanId;	
 	List<FahrplanDTO> fahrplaene;
+	List<FahrplanDTO> linien;
 	
 	// Beim Seitenaufbau immer durchgeführt.
 	@PostConstruct
 	public void init() {
+		//Fahrpläne enthalten alle Fahrpläne
 		fahrplaene = fahrplanDao.loadFahrplaene();
+		
+		//linien nur Fahrpläne mit Haltestellen
+		linien = fahrplanDao.loadFahrplaene();
+		for(int i = 0; i<linien.size(); i++) {
+			if(verbindungDao.getHaltestellenByFahrplanId(linien.get(i).getId()).size() == 0){
+				linien.remove(i);
+				i--;
+			}			
+		}
 	}
 
 	public void add() {
@@ -40,7 +52,7 @@ public class FahrplanEJB {
 
 	
 	public String getFahrplanById(){
-		//Weiterleitung an die Fahrplanübersich einer Haltestelle/ fahrplanId ist in diesem Fall die ID der Haltestelle
+		//Weiterleitung an die Fahrplanübersicht einer Haltestelle/ fahrplanId ist in diesem Fall die ID der Haltestelle
 		fahrplaene = verbindungDao.getFarhplaeneByHaltestelleId(fahrplanId);	
 		return "fahrplanSpeziell.xhtml";
 	}
@@ -67,5 +79,13 @@ public class FahrplanEJB {
 
 	public void setFahrplaene(List<FahrplanDTO> fahrplaene) {
 		this.fahrplaene = fahrplaene;
+	}
+
+	public List<FahrplanDTO> getLinien() {
+		return linien;
+	}
+
+	public void setLinien(List<FahrplanDTO> linien) {
+		this.linien = linien;
 	}
 }

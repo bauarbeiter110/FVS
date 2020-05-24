@@ -32,11 +32,12 @@ public class Verbindung implements Serializable {
 
 	public Verbindung() {
 	}
-	
-	public Verbindung(Haltestelle ursprung, Haltestelle ziel, Time dauer) {
+
+	public Verbindung(int id, Haltestelle ursprung, Haltestelle ziel, Time dauer) {
 		this.Ursprung = ursprung;
 		this.Ziel = ziel;
 		this.dauer = dauer;
+		this.id = id;
 	}
 
 	public int getId() {

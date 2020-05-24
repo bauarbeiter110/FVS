@@ -31,6 +31,13 @@ public class FahrplanVerbindung implements Serializable {
 
 	public FahrplanVerbindung() {
 	}
+	
+	public FahrplanVerbindung(int reinfolge, Fahrplan fahrplan, Verbindung verbindung) {
+		this.id = new FahrplanVerbindungPK(fahrplan.getId(), verbindung.getId());
+		this.reinfolge = reinfolge;
+		this.Fahrplan = fahrplan;
+		this.Verbindung = verbindung;
+	}
 
 	public FahrplanVerbindungPK getId() {
 		return this.id;

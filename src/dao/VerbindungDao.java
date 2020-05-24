@@ -31,6 +31,10 @@ public class VerbindungDao implements Serializable {
 		em.merge(verbin);
 	}
 	
+	public VerbindungDTO getVerbindungById(int verbindungId) {
+		return new VerbindungDTO(em.find(Verbindung.class, verbindungId));
+	}
+	
 	public List<VerbindungDTO> loadVerbindung() {		
 		List<Verbindung> users = em.createQuery("SELECT v FROM Verbindung v", Verbindung.class).getResultList();
 		List<VerbindungDTO> dtos = new ArrayList <VerbindungDTO>();

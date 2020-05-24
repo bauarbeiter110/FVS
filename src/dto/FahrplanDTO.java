@@ -75,4 +75,8 @@ public class FahrplanDTO {
 	public int getId() {
 		return id;
 	}
+
+	public Fahrplan toEntity() {
+		return new Fahrplan(id, linienname, startzeitpunkt, starthaltestelle.toEntity(), zielhaltestelle.toEntity());
+	}
 }

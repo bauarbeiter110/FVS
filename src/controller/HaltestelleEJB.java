@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,6 +12,7 @@ import dao.HaltestelleDao;
 import dao.VerbindungDao;
 import dto.FahrplanDTO;
 import dto.HaltestelleDTO;
+import dto.VerbindungDTO;
 import entities.Haltestelle;
 
 @Named(value = "HaltestelleEJB")
@@ -27,6 +29,7 @@ public class HaltestelleEJB {
 	VerbindungDao verbindungDao;
 
 	List<HaltestelleDTO> haltestellen;
+	List<String> weitereHaltestellen;
 	
 	String name;
 	int haltestelleId;
@@ -40,12 +43,6 @@ public class HaltestelleEJB {
 		return haltestellen;
 	}
 	
-	public String getHaltestellenById(){
-		//Weiterleitung an die Haltestellenübersicht einer Linie/ haltestelleId ist in diesem Fall die ID der Fahrplanes
-		haltestellen = verbindungDao.getHaltestellenByFahrplanId(haltestelleId);	
-		return "haltestelleSpeziell.xhtml";
-	}
-
 	public void setHaltestellen(List<HaltestelleDTO> haltestellen) {
 		this.haltestellen = haltestellen;
 	}
@@ -74,5 +71,13 @@ public class HaltestelleEJB {
 
 	public void setHaltestelleId(int haltestelleId) {
 		this.haltestelleId = haltestelleId;
+	}
+
+	public List<String> getWeitereHaltestellen() {
+		return weitereHaltestellen;
+	}
+
+	public void setWeitereHaltestellen(List<String> weitereHaltestellen) {
+		this.weitereHaltestellen = weitereHaltestellen;
 	}
 }
