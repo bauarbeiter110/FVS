@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.Serializable;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,12 +44,11 @@ public class FahrplanVerbindungEJB implements Serializable {
 	int nextHaltId;
 	int linieId;
 	List<HaltestelleDTO> mglNextHalt;
-	List<HaltestelleDTO> haltestellen;
+	List<VerbindungDTO> haltestellen;
 	FahrplanDTO fahr;
 	String linienname;
 
 	public String fahrplanUebersichtToHaltestelleSpeziell() {
-		haltestellen = verbindungDao.getSortedHaltestellenByFahrplanId(linieId);
 		fahr = fahrDao.getFahrplanById(linieId);
 		linienname = fahr.getLinienname();
 		HaltestelleDTO lastHalt = fahr.getZielhaltestelle();
@@ -56,7 +56,19 @@ public class FahrplanVerbindungEJB implements Serializable {
 		mglNextHalt = new ArrayList<HaltestelleDTO>();
 		// Ermittlung der möglichen nächsten Verbindungen
 		List<VerbindungDTO> verbindungen = verbindungDao.loadVerbindung();
-
+		
+		List<HaltestelleDTO> haltestelle = verbindungDao.getSortedHaltestellenByFahrplanId(linieId);
+		List<Time> times = verbindungDao.getSortedTimeByFahrplanId(linieId);
+		haltestellen = new ArrayList<VerbindungDTO>();
+		haltestellen.add(new VerbindungDTO(fahr.getStartzeitpunkt(), fahr.getStarthaltestelle(), fahr.getStarthaltestelle()));
+		for(int i = 0 ; i <= times.size()-1; i++) {
+			@SuppressWarnings("deprecation")
+			int hh = haltestellen.get(i).getDauer().getHours() + times.get(i).getHours();
+			int mm = haltestellen.get(i).getDauer().getMinutes() + times.get(i).getMinutes();
+			Time t = new Time(hh , mm , 0);
+			haltestellen.add(new VerbindungDTO(t, haltestelle.get(i+1), haltestelle.get(i+1)));
+		}
+		
 		// Ermittlung der Vorletzten Haltestelle.
 		VerbindungDTO lastVer = fahrDao.getlastVerbindung(linieId);
 		for (int i = 0; i < verbindungen.size(); i++) {
@@ -88,10 +100,10 @@ public class FahrplanVerbindungEJB implements Serializable {
 		fahrVerDao.saveFahrplanVerbindung(fahrVer);
 		// Wenn die neue Verbindung gespeichert ist, muss für den Fahrplan noch die
 		// Zielhaltestelle aktualisiert werden.
-		if (ver.getZiel().getId() != fahr.getZielhaltestelle().getId()) {
-			fahr.setZielhaltestelle(ver.getZiel());
-		} else {
+		if (ver.getZiel().getId() == fahr.getZielhaltestelle().getId()) {
 			fahr.setZielhaltestelle(ver.getUrsprung());
+		} else {
+			fahr.setZielhaltestelle(ver.getZiel());
 		}
 		fahrDao.saveFahrplan(fahr);
 		return "navigation.xhtml";
@@ -125,11 +137,11 @@ public class FahrplanVerbindungEJB implements Serializable {
 		this.linieId = linieId;
 	}
 
-	public List<HaltestelleDTO> getHaltestellen() {
+	public List<VerbindungDTO> getHaltestellen() {
 		return haltestellen;
 	}
 
-	public void setHaltestellen(List<HaltestelleDTO> haltestellen) {
+	public void setHaltestellen(List<VerbindungDTO> haltestellen) {
 		this.haltestellen = haltestellen;
 	}
 
