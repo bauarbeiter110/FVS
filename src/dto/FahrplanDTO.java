@@ -27,10 +27,10 @@ public class FahrplanDTO {
 	public FahrplanDTO() {
 	}
 
-	public FahrplanDTO(Fahrplan fahr, HaltestelleDTO starthaltestelle, HaltestelleDTO zielhaltestelle) {
-		this.id = fahr.getId();
-		this.linienname = fahr.getLinienname();
-		this.startzeitpunkt = fahr.getStartzeitpunkt();
+	public FahrplanDTO(int id, String linienname, Time startzeitpunkt, HaltestelleDTO starthaltestelle, HaltestelleDTO zielhaltestelle) {
+		this.id = id ;
+		this.linienname = linienname;
+		this.startzeitpunkt = startzeitpunkt;
 		this.starthaltestelle = starthaltestelle;
 		this.zielhaltestelle = zielhaltestelle;
 	}

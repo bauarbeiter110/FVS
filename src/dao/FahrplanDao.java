@@ -31,12 +31,10 @@ public class FahrplanDao {
 		List<Fahrplan> fahrplaene = em.createQuery("SELECT f FROM Fahrplan f", Fahrplan.class).getResultList();
 		List<FahrplanDTO> dtos = new ArrayList<FahrplanDTO>();
 		for (Fahrplan fahr : fahrplaene) {
-			if ((fahr.getStarthaltestelle() == null) && (fahr.getZielhaltestelle() == null)) {
+			if ((fahr.getStarthaltestelle() == null) || (fahr.getZielhaltestelle() == null)) {
 				dtos.add(new FahrplanDTO(fahr.getId(), fahr.getLinienname()));
 			} else {
-				HaltestelleDTO start = new HaltestelleDTO(fahr.getStarthaltestelle());
-				HaltestelleDTO ziel = new HaltestelleDTO(fahr.getZielhaltestelle());
-				dtos.add(new FahrplanDTO(fahr, start, ziel));
+				dtos.add(new FahrplanDTO(fahr));
 			}
 		}
 		return dtos;
@@ -57,9 +55,11 @@ public class FahrplanDao {
 
 	public FahrplanDTO getFahrplanById(int id) {
 		Fahrplan fahr = em.find(Fahrplan.class, id);
-		HaltestelleDTO start = new HaltestelleDTO(fahr.getStarthaltestelle());
-		HaltestelleDTO ziel = new HaltestelleDTO(fahr.getZielhaltestelle());
-		return new FahrplanDTO(fahr, start, ziel);
+		if ((fahr.getStarthaltestelle() == null) || (fahr.getZielhaltestelle() == null)) {
+			return new FahrplanDTO(fahr.getId(), fahr.getLinienname());
+		} else {
+			return new FahrplanDTO(fahr);
+		}
 	}
 	
 	public VerbindungDTO getlastVerbindung(int fahrplanId){

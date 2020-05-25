@@ -28,7 +28,7 @@ public class FahrplanVerbindungDao {
 		for(int i = 0; i< fahrplanVerbindung.size(); i++) {
 			FahrplanVerbindung fahrVer = fahrplanVerbindung.get(i);
 			VerbindungDTO ver = new VerbindungDTO(fahrVer.getVerbindung());
-			FahrplanDTO fahr =  new FahrplanDTO(fahrVer.getFahrplan(), new HaltestelleDTO(fahrVer.getFahrplan().getStarthaltestelle()), new HaltestelleDTO(fahrVer.getFahrplan().getZielhaltestelle()));
+			FahrplanDTO fahr =  new FahrplanDTO(fahrVer.getFahrplan());
 			dtos.add(new FahrplanVerbindungDTO(fahrVer.getReinfolge(), fahr, ver));
 		}
 		return dtos;

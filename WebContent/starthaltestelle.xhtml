@@ -12,8 +12,36 @@
 	<f:view>
 		<h:outputLabel value="Hallo #{SessionUser.sessionUser.name}" />
 		<br />
-		<h:outputLabel value="Hier können sie die erste Verbindung und den Startzeitpunkt der Linie auswählen"/>
+		<h:outputLabel
+			value="Hier können sie die erste Verbindung und den Startzeitpunkt der Linie auswählen" />
 		<br />
+		<h:form>
+			<br />
+			<h:outputLabel> Wählen Sie eine Startverbindung aus</h:outputLabel>
+			<br />
+			<h:selectOneMenu id="verTabel"
+				value="#{StarthaltestelleEJB.nextVerbId}">
+				<f:selectItems id="InVerItems"
+					value="#{StarthaltestelleEJB.verbindungen}" var="ver"
+					itemLabel="Von #{ver.ursprung.name} zu #{ver.ziel.name}"
+					itemValue="#{ver.id}" />
+			</h:selectOneMenu>
+			<h:outputLabel> Wählen Sie einen Startzeitpunkt aus.</h:outputLabel>
+			<br />
+			<h:outputLabel> Erstes Feld Stunden. Zweites Feld Minuten</h:outputLabel>
+			<br />
+			<h:inputText id="InTimeHH" required="true"
+				requiredMessage="Bitte geben Sie die Stunde des Startzeitpunktes ein."
+				value="#{StarthaltestelleEJB.hh}" />
+			<h:inputText id="InTimeMM" required="true"
+				requiredMessage="Bitte geben Sie die Minuten des Startzeitpunktes ein"
+				value="#{StarthaltestelleEJB.min}" />
+			<h:commandButton id="Button" value="Startverbindung wählen"
+				action="#{StarthaltestelleEJB.addStartverbindung}" />
+			<h:message style="color:red" />
+			<br />
+		</h:form>
+
 		<br />
 		<h:form>
 			<h:commandButton value="Zurück" action="fahrplanUebersicht.xhtml" />

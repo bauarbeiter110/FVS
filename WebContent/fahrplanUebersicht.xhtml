@@ -80,19 +80,17 @@
 			<h:message for="InHaltestellen" style="color:red" />
 		</h:form>
 		<h:form>
+			<br />
+			<br />
 			<h:outputLabel> Bitte wählen Sie eine Linie aus, bei der sie Starthaltestelle und Startzeitpunkt definieren wollen:</h:outputLabel>
 			<br />
-			<h:selectOneMenu id="InHaltestellen"
-				value="#{FahrplanVerbindungEJB.linieId}">
-				<f:selectItems id="InHaltestellenItems"
-					value="#{FahrplanEJB.linien2}" var="Fahr"
+			<h:selectOneMenu id="InLinie"
+				value="#{StarthaltestelleEJB.fahrplanId}">
+				<f:selectItems id="Items" value="#{FahrplanEJB.linien2}" var="Fahr"
 					itemLabel="#{Fahr.linienname}" itemValue="#{Fahr.id}">
 				</f:selectItems>
 			</h:selectOneMenu>
-			<h:commandButton value="auswählen"
-				action="#{FahrplanVerbindungEJB.fahrplanUebersichtToStarthaltestelle}">
-				<f:ajax execute="InHaltestellen" render="InHaltestellen"
-					event="click" />
+			<h:commandButton value="auswählen" action="#{StarthaltestelleEJB.fahrplanUebersichtToStarthaltstelle}">
 			</h:commandButton>
 			<br />
 			<h:message for="InHaltestellen" style="color:red" />
