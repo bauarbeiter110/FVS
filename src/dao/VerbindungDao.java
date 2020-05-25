@@ -1,7 +1,6 @@
 package dao;
 
 import java.io.Serializable;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,16 +61,6 @@ public class VerbindungDao implements Serializable {
 		users.forEach((ver) -> dtos.add(new VerbindungDTO(ver)));
 		return dtos;
 	}
-	
-	public List<Time> getSortedTimeByFahrplanId(int fahrplanId){
-		List<Time> dtos = new ArrayList<Time>();
-		List<FahrplanVerbindung> fahrplanVerbindungen = em.createQuery(
-				"SELECT f FROM FahrplanVerbindung f INNER JOIN Verbindung v ON f.Verbindung.id = v.id WHERE f.Fahrplan.id = "
-						+ fahrplanId,
-				FahrplanVerbindung.class).getResultList();
-		fahrplanVerbindungen.forEach((ver)-> dtos.add(ver.getVerbindung().getDauer()));	
-		return dtos;
-	}
 
 	public List<HaltestelleDTO> getSortedHaltestellenByFahrplanId(int fahrplanId) {
 		List<HaltestelleDTO> dtos = new ArrayList<HaltestelleDTO>();
@@ -118,13 +107,11 @@ public class VerbindungDao implements Serializable {
 					UrsprungIstLetztesElement = false;
 				} else {
 					dtos.add(now.getUrsprung());
-					UrsprungIstLetztesElement = true;
 				}
 			} else {
 				// Das Ziel der letzten Verbindung ist das letzte Element in dtos
 				if (last.getZiel().getId() == now.getUrsprung().getId()) {
 					dtos.add(now.getZiel());
-					UrsprungIstLetztesElement = false;
 				} else {
 					dtos.add(now.getUrsprung());
 					UrsprungIstLetztesElement = true;
