@@ -2,14 +2,11 @@ package dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.*;
-import javax.persistence.metamodel.EntityType;
 
-import dto.FahrplanDTO;
 import dto.UserDTO;
 import entities.*;
 
@@ -37,10 +34,10 @@ public class UserDao {
 		em.merge(new User(name));
 	}
 	
-	public void deleteUser(int userId) {
-		em.remove(em.find(User.class, userId));
-	}
-	
+	/**Finde einen User über den verwendeten Namen
+	 * @param name Name des zu suchenden Users
+	 * @return sofern ein User existiert einen entsprechenden UserDTO ansonsten null
+	 */
 	public UserDTO findUserByName(String name) {
 		List <User> users = em.createQuery("SELECT u FROM User u", User.class).getResultList();
 		for(User user: users) {
@@ -51,10 +48,10 @@ public class UserDao {
 		return null;
 	}
 	
-	public void gibMetaAus() {
-		Set<EntityType<?>> tabellen = em.getMetamodel().getEntities();
-    	for(EntityType tabelle : tabellen) {
-    		System.out.println(tabelle.toString());
-    	}
+	/**Lösche einen User
+	 * @param userId PK des zu löschenden Users
+	 */
+	public void deleteUser(int userId) {
+		em.remove(em.find(User.class, userId));
 	}
 }

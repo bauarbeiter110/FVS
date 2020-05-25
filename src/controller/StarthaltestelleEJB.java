@@ -62,7 +62,7 @@ public class StarthaltestelleEJB implements Serializable{
 		Time t = new Time(hh, min, 0);
 		
 		fahr.setStartzeitpunkt(t);
-		VerbindungDTO verb = verbindungDao.getVerbindungById(nextVerbId);
+		VerbindungDTO verb = verbindungDao.findVerbindungById(nextVerbId);
 		fahr.setStarthaltestelle(verb.getUrsprung());
 		fahr.setZielhaltestelle(verb.getZiel());
 		fahrplanDao.saveFahrplan(fahr);

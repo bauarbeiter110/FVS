@@ -70,7 +70,7 @@ public class FahrplanVerbindungEJB implements Serializable {
 		}
 		
 		// Ermittlung der Vorletzten Haltestelle.
-		VerbindungDTO lastVer = fahrDao.getlastVerbindung(linieId);
+		VerbindungDTO lastVer = verbindungDao.getlastVerbindung(linieId);
 		for (int i = 0; i < verbindungen.size(); i++) {
 			VerbindungDTO ver = verbindungen.get(i);
 			if (ver.getId() == lastVer.getId()) {

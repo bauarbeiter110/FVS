@@ -21,19 +21,21 @@ public class FahrplanVerbindungDao {
 	@PersistenceContext(unitName = "fvs")
 	private EntityManager em;
 
+	/**Lade alle FahrplanVerbindungen in der DB
+	 * @return
+	 */
 	public List<FahrplanVerbindungDTO> loadFahrplanVerbindung() {
 		List<FahrplanVerbindung> fahrplanVerbindung = em
 				.createQuery("SELECT f FROM FahrplanVerbindung f", FahrplanVerbindung.class).getResultList();
 		List<FahrplanVerbindungDTO> dtos = new ArrayList<FahrplanVerbindungDTO>();
-		for(int i = 0; i< fahrplanVerbindung.size(); i++) {
-			FahrplanVerbindung fahrVer = fahrplanVerbindung.get(i);
-			VerbindungDTO ver = new VerbindungDTO(fahrVer.getVerbindung());
-			FahrplanDTO fahr =  new FahrplanDTO(fahrVer.getFahrplan());
-			dtos.add(new FahrplanVerbindungDTO(fahrVer.getReinfolge(), fahr, ver));
-		}
+		fahrplanVerbindung.forEach((fahrVer)-> dtos.add(new FahrplanVerbindungDTO(fahrVer)));
 		return dtos;
 	}
 	
+	/**Suche alle FahrplanVerbindungen dieses Fahrplanes
+	 * @param fahrplanId Der PK des Fahrplanes
+	 * @return
+	 */
 	public List<FahrplanVerbindungDTO> getFahrplanVerbindungByFahrplan(int fahrplanId){
 		List<FahrplanVerbindungDTO> fahrplanVerbindung = loadFahrplanVerbindung();
 		List<FahrplanVerbindungDTO> dtos = new ArrayList<FahrplanVerbindungDTO>();
@@ -45,6 +47,9 @@ public class FahrplanVerbindungDao {
 		return dtos;
 	}
 	
+	/**Persistiere die FahrplanVerbindung in der DB
+	 * @param fahrVer
+	 */
 	public void saveFahrplanVerbindung(FahrplanVerbindungDTO fahrVer) {
 		em.merge(fahrVer.toEntity());
 	}

@@ -59,11 +59,6 @@ public class HaltestelleEJB {
 		halteDao.createHaltestelle(this.name);
 		haltestellen = halteDao.loadHaltestellen();
 	}
-	
-	public void delete() {
-		halteDao.deleteHaltestelle(haltestelleId);	
-		haltestellen = halteDao.loadHaltestellen();
-	}
 
 	public int getHaltestelleId() {
 		return haltestelleId;

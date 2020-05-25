@@ -21,6 +21,10 @@ public class Haltestelle implements Serializable {
 
 	public Haltestelle() {
 	}
+	
+	public Haltestelle(String name) {
+		this.name = name;
+	}
 
 	public Haltestelle(int id, String name) {
 		this.id = id;

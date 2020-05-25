@@ -31,62 +31,96 @@ public class VerbindungDao implements Serializable {
 
 	@Inject
 	FahrplanDao fahrDao;
+	
+	@Inject 
+	FahrplanVerbindungDao fahrVerDao;
 
-	public void saveVerbindung(VerbindungDTO ver) {
-		Verbindung verbin = ver.toEntity();
-		em.merge(verbin);
+	/**Persistiere die VerbindungDTO als Verbindung in der DB
+	 * @param verbindung die zu persistierende VerbindungDTO
+	 */
+	public void saveVerbindung(VerbindungDTO verbindung) {
+		em.merge(verbindung.toEntity());
 	}
 
-	public VerbindungDTO getVerbindungById(int verbindungId) {
+	/**Finde die Verbindung innerhalb der DB
+	 * @param verbindungId Der PK der gesuchtenVerbindung
+	 * @return VerbindungDTO der gesuchten verbindung.
+	 */
+	public VerbindungDTO findVerbindungById(int verbindungId) {
 		return new VerbindungDTO(em.find(Verbindung.class, verbindungId));
 	}
+	
+	/**Bekomme die letzte Verbindung dieses Fahrplanes. 
+	 * @param fahrplanId PK des Fahrplanes
+	 * @return VerbindungDTO die die größte Reinfolge hat.
+	 */
+	public VerbindungDTO getlastVerbindung(int fahrplanId){
+		List <FahrplanVerbindungDTO> fahrver = fahrVerDao.getFahrplanVerbindungByFahrplan(fahrplanId);
+		FahrplanVerbindungDTO dto = fahrver.get(0);
+		for(int i = 0; i < fahrver.size(); i++) {
+			if(dto.getReinfolge() < fahrver.get(i).getReinfolge()) {
+				dto = fahrver.get(i);
+			}
+		}
+		return dto.getVerbindung();
+	}
 
-	public VerbindungDTO getVerbindungByHaltestellen(HaltestelleDTO start, HaltestelleDTO ende) {
+	/**Überprüfe ob es zwischen diesen Haltestellen eine Verbindung gibt. Die Richtung ist irrelevant.
+	 * @param halt1 Eine der beiden Haltestellen.
+	 * @param halt2 Die zweite Haltestelle.
+	 * @return Sofern sie existiert, die VerbindungDTO
+	 */
+	public VerbindungDTO getVerbindungByHaltestellen(HaltestelleDTO halt1, HaltestelleDTO halt2) {
 		List<VerbindungDTO> ver = loadVerbindung();
-		VerbindungDTO dto = new VerbindungDTO();
 		for (int i = 0; i < ver.size(); i++) {
 			VerbindungDTO verbindung = ver.get(i);
-			if (verbindung.getUrsprung().getId() == start.getId() && verbindung.getZiel().getId() == ende.getId()) {
+			if (verbindung.getUrsprung().getId() == halt1.getId() && verbindung.getZiel().getId() == halt2.getId()) {
 				return verbindung;
 			}
-			if (verbindung.getUrsprung().getId() == ende.getId() && verbindung.getZiel().getId() == start.getId()) {
+			if (verbindung.getUrsprung().getId() == halt2.getId() && verbindung.getZiel().getId() == halt1.getId()) {
 				return verbindung;
 			}
 		}
 		return null;
 	}
 
+	/**Lade alle Verbindungen der DB
+	 * @return die VerbindungDTOs aller Verbindungen 
+	 */
 	public List<VerbindungDTO> loadVerbindung() {
-		List<Verbindung> users = em.createQuery("SELECT v FROM Verbindung v", Verbindung.class).getResultList();
+		List<Verbindung> verbindungen = em.createQuery("SELECT v FROM Verbindung v", Verbindung.class).getResultList();
 		List<VerbindungDTO> dtos = new ArrayList<VerbindungDTO>();
-		users.forEach((ver) -> dtos.add(new VerbindungDTO(ver)));
+		verbindungen.forEach((ver) -> dtos.add(new VerbindungDTO(ver)));
 		return dtos;
 	}
 	
+	/**Gibt die Dauer der Verbindungen zurück, die zu diesem Fahrplan gehören. 
+	 * @param fahrplanId Der PK des Fahrplanes
+	 * @return Eine Liste aller Fahrtzeiten dieses Fahrplanes
+	 */
 	public List<Time> getSortedTimeByFahrplanId(int fahrplanId){
 		List<Time> dtos = new ArrayList<Time>();
-		List<FahrplanVerbindung> fahrplanVerbindungen = em.createQuery(
-				"SELECT f FROM FahrplanVerbindung f INNER JOIN Verbindung v ON f.Verbindung.id = v.id WHERE f.Fahrplan.id = "
-						+ fahrplanId,
-				FahrplanVerbindung.class).getResultList();
+		List<FahrplanVerbindungDTO> fahrplanVerbindungen = fahrVerDao.getFahrplanVerbindungByFahrplan(fahrplanId);
 		fahrplanVerbindungen.forEach((ver)-> dtos.add(ver.getVerbindung().getDauer()));	
 		return dtos;
 	}
 
+	/** Gibt alle Haltestellen wieder, in der Reinfolge in der sie von der gewünschten Linie angefahren werden.
+	 * @param fahrplanId Der PK des Fahrplanes
+	 * @return
+	 */
 	public List<HaltestelleDTO> getSortedHaltestellenByFahrplanId(int fahrplanId) {
 		List<HaltestelleDTO> dtos = new ArrayList<HaltestelleDTO>();
-		List<FahrplanVerbindung> verbindungen = em.createQuery(
-				"SELECT f FROM FahrplanVerbindung f INNER JOIN Verbindung v ON f.Verbindung.id = v.id WHERE f.Fahrplan.id = "
-						+ fahrplanId,
-				FahrplanVerbindung.class).getResultList();
+		// Alle FahrplanVerbindungen dieses Fahrplanes
+		List<FahrplanVerbindungDTO> verbindungen = fahrVerDao.getFahrplanVerbindungByFahrplan(fahrplanId);
 		if (verbindungen.size() == 0) {
 			// Wenn keine Verbindungen zu diesem Fahrplan gehören, dann gebe eine leere
 			// Liste zurück.
 			return dtos;
 		}
 		if (verbindungen.size() == 1) {
-			dtos.add(new HaltestelleDTO(verbindungen.get(0).getVerbindung().getUrsprung()));
-			dtos.add(new HaltestelleDTO(verbindungen.get(0).getVerbindung().getZiel()));
+			dtos.add(verbindungen.get(0).getVerbindung().getUrsprung());
+			dtos.add(verbindungen.get(0).getVerbindung().getZiel());
 			return dtos;
 		}
 		
@@ -94,7 +128,7 @@ public class VerbindungDao implements Serializable {
 		// Und nur noch Verbindungen die zu diesem Fahrplan gehören. Diese müssen noch
 		// nach der Reinfolge sortiert werden
 		List<VerbindungDTO> sort = new ArrayList<VerbindungDTO>();
-		verbindungen.forEach((ver) -> sort.add(new VerbindungDTO(ver.getVerbindung())));
+		verbindungen.forEach((ver) -> sort.add(ver.getVerbindung()));
 		boolean UrsprungIstLetztesElement;
 		// Festlegung des ersten Elementes in Abhängigkeit des zweiten Eintrages.
 		if (sort.get(0).getZiel().getId() == sort.get(1).getUrsprung().getId()
@@ -136,10 +170,11 @@ public class VerbindungDao implements Serializable {
 		return dtos;
 	}
 
+	/**Finde alle Fahrpläne, die diese Haltestelle anfahren
+	 * @param haltestelleId PK der Haltestelle.
+	 * @return
+	 */
 	public List<FahrplanDTO> getFarhplaeneByHaltestelleId(int haltestelleId) {
-		// TODO: Beide Abfragen könnten mithilfe einer Abfrage
-		// Haltestelle OUTER JOIN Verbindung INNER JOIN VerbindungFahrplan
-		// ersetzt werden.
 		List<Verbindung> verbindungen = em.createQuery("SELECT v FROM Verbindung v", Verbindung.class).getResultList();
 		List<Verbindung> ver = new ArrayList<Verbindung>();
 		for (int i = 0; i < verbindungen.size(); i++) {
@@ -150,14 +185,13 @@ public class VerbindungDao implements Serializable {
 				ver.add(verbindungen.get(i));
 			}
 		}
-		List<FahrplanVerbindung> fv = em.createQuery("SELECT f FROM FahrplanVerbindung f", FahrplanVerbindung.class)
-				.getResultList();
+		List<FahrplanVerbindungDTO> fv = fahrVerDao.loadFahrplanVerbindung();
 		List<FahrplanDTO> dto = new ArrayList<FahrplanDTO>();
 		for (int i = 0; i < fv.size(); i++) {
 			for (int j = 0; j < ver.size(); j++) {
 				// Wenn die Verbindung in einem Fahrplan verwendet wird
 				if (fv.get(i).getVerbindung().getId() == ver.get(j).getId()) {
-					// Nur ergänzen, senn der Fahrplan noch nicht in den dto vorhanden ist.
+					// Nur ergänzen, wenn der Fahrplan noch nicht in den dto vorhanden ist.
 					boolean exists = true;
 					for (int k = 0; k < dto.size(); k++) {
 						if (dto.get(k).getId() == fv.get(i).getFahrplan().getId()) {
