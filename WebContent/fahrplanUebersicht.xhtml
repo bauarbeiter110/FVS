@@ -37,7 +37,7 @@
 				</h:column>
 			</h:dataTable>
 			<br />
-			<h:commandButton value="Linien Tabelle aktualisieren">
+			<h:commandButton value="Tabelle aktualisieren">
 				<f:ajax render="linienTable" event="click" />
 			</h:commandButton>
 			<br />
@@ -52,7 +52,7 @@
 				value="#{FahrplanEJB.linienname}">
 				<f:ajax execute="InName" render="InName linienTable" event="click" />
 			</h:inputText>
-			<h:commandButton value="Buslinie hinzufügen"
+			<h:commandButton value="Linie hinzufügen"
 				action="#{FahrplanEJB.add()}" />
 			<br />
 			<h:message for="InName" style="color:red" />
@@ -60,9 +60,7 @@
 		</h:form>
 		<br />
 		<h:form>
-			<h:outputLabel> Bitte wählen Sie eine Linie aus, deren Haltestellen sie sehen wollen:</h:outputLabel>
-			<br />
-			<h:outputLabel> Auch können Sie die Linie um weitere Haltestellen erweitern</h:outputLabel>
+			<h:outputLabel> Bitte wählen Sie eine Linie aus, deren Fahrplan sie sehen wollen:</h:outputLabel>
 			<br />
 			<h:selectOneMenu id="InHaltestellen"
 				value="#{FahrplanVerbindungEJB.linieId}">

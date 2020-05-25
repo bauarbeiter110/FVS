@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import dao.FahrplanDao;
+import dao.HaltestelleDao;
 import dao.UserDao;
 import dao.VerbindungDao;
 import dto.FahrplanDTO;
@@ -32,10 +33,15 @@ public class FolgehaltestelleEJB implements Serializable {
 	@Inject
 	VerbindungDao verbindungDao;
 	
+	@Inject
+	HaltestelleDao haltDao;
+	
 	int haltestelleId;
+	String haltestellenName;
 	
 	List<FahrplanDTO> fahrplaene = new ArrayList<FahrplanDTO>();
 	List<HaltestelleDTO> haltestelle = new ArrayList<HaltestelleDTO>();
+	List<VerbindungDTO> verbindungen = new ArrayList<VerbindungDTO>();
 	
 	@PostConstruct
 	public void init() {
@@ -44,6 +50,7 @@ public class FolgehaltestelleEJB implements Serializable {
 	
 	public String toFahrplanSpeziell() {
 		fahrplaene = verbindungDao.getFarhplaeneByHaltestelleId(haltestelleId);
+		haltestellenName = haltDao.findHaltestelleById(haltestelleId).getName();
 		return "fahrplanSpeziell.xhtml";
 	}
 	
@@ -62,7 +69,7 @@ public class FolgehaltestelleEJB implements Serializable {
 		}
 		return "folgehaltestellen.xhtml";
 	}
-
+	
 	public int getHaltestelleId() {
 		return haltestelleId;
 	}
@@ -85,6 +92,22 @@ public class FolgehaltestelleEJB implements Serializable {
 
 	public void setHaltestelle(List<HaltestelleDTO> haltestelle) {
 		this.haltestelle = haltestelle;
+	}
+
+	public String getHaltestellenName() {
+		return haltestellenName;
+	}
+
+	public void setHaltestellenName(String haltestellenName) {
+		this.haltestellenName = haltestellenName;
+	}
+
+	public List<VerbindungDTO> getVerbindungen() {
+		return verbindungen;
+	}
+
+	public void setVerbindungen(List<VerbindungDTO> verbindungen) {
+		this.verbindungen = verbindungen;
 	}
 
 	

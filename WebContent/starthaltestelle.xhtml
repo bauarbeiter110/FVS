@@ -17,6 +17,7 @@
 		<br />
 		<h:form>
 			<br />
+			<br />
 			<h:outputLabel> Wählen Sie eine Startverbindung aus</h:outputLabel>
 			<br />
 			<h:selectOneMenu id="verTabel"
@@ -26,9 +27,12 @@
 					itemLabel="Von #{ver.ursprung.name} zu #{ver.ziel.name}"
 					itemValue="#{ver.id}" />
 			</h:selectOneMenu>
+			<br />
 			<h:outputLabel> Wählen Sie einen Startzeitpunkt aus.</h:outputLabel>
 			<br />
-			<h:outputLabel> Erstes Feld Stunden. Zweites Feld Minuten</h:outputLabel>
+			<h:outputLabel>Erstes Feld hh.</h:outputLabel>
+			<br />
+			<h:outputLabel>Zweites Feld min.</h:outputLabel>
 			<br />
 			<h:inputText id="InTimeHH" required="true"
 				requiredMessage="Bitte geben Sie die Stunde des Startzeitpunktes ein."
@@ -36,7 +40,7 @@
 			<h:inputText id="InTimeMM" required="true"
 				requiredMessage="Bitte geben Sie die Minuten des Startzeitpunktes ein"
 				value="#{StarthaltestelleEJB.min}" />
-			<h:commandButton id="Button" value="Startverbindung wählen"
+			<h:commandButton id="Button" value="Startverbindung hinzufügen"
 				action="#{StarthaltestelleEJB.addStartverbindung}" />
 			<h:message style="color:red" />
 			<br />

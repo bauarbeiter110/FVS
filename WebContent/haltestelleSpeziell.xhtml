@@ -13,7 +13,7 @@
 		<h:outputLabel value="Hallo #{SessionUser.sessionUser.name}" />
 		<br />
 		<h:outputLabel
-			value="Die Haltestellen der von ihnen ausgewählten Linie '#{FahrplanVerbindungEJB.linienname}'" />
+			value="Der Fahrplan der von ihnen ausgewählten Linie '#{FahrplanVerbindungEJB.linienname}'" />
 		<br />
 			<h:dataTable id="haltestellenTable"
 				value="#{FahrplanVerbindungEJB.haltestellen}" var="verb">
@@ -35,7 +35,7 @@
 
 		<h:form>
 			<br />
-			<h:outputLabel> Wählen Sie eine Haltestelle aus zu der die Linie als nächstes fahren soll</h:outputLabel>
+			<h:outputLabel> Wählen Sie die nächste Haltestelle der Linie aus</h:outputLabel>
 			<br />
 			<h:selectOneMenu id="InVer"
 				value="#{FahrplanVerbindungEJB.nextHaltId}">
@@ -44,7 +44,7 @@
 					itemLabel="#{halt.name}" itemValue="#{halt.id}" 
 					/>
 			</h:selectOneMenu>
-			<h:commandButton id="Button" value="Ergänzen"
+			<h:commandButton id="Button" value="hinzufügen"
 				action="#{FahrplanVerbindungEJB.addVerbindung}" />
 			<br />
 			<h:message for="InVer" style="color:red" />

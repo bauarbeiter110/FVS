@@ -12,7 +12,7 @@
 	<f:view>
 		<h:outputLabel value="Hallo #{SessionUser.sessionUser.name}" />
 		<br />
-		<h:outputLabel value="Die Fahrpläne der von ihnen ausgewählten Haltestelle"/>
+		<h:outputLabel value="Die Fahrpläne der von ihnen ausgewählten Haltestelle '#{FolgehaltestelleEJB.haltestellenName}'"/>
 		<br />
 		<h:form>
 			<h:dataTable id="haltestellenTable"
@@ -26,12 +26,11 @@
 					<h:outputText value="#{linie.linienname}" />
 				</h:column>
 				<h:column>
-					<h:commandButton value="Folgehaltestellen Ansehen" action="#{FolgehaltestelleEJB.toFolgehaltestelle(linie.id)}" />
+					<h:commandButton value="Fahrplan ansehen" action="#{FolgehaltestelleEJB.toFolgehaltestelle(linie.id)}" />
 				</h:column>
 			</h:dataTable>
 			<br />
 		</h:form>
-		<br />
 		<h:form>
 			<h:commandButton value="Zurück" action="haltestelleUebersicht.xhtml" />
 		</h:form>

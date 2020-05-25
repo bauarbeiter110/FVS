@@ -28,7 +28,7 @@
 				</h:column>
 			</h:dataTable>
 			<br />
-			<h:commandButton value="User Tabelle aktualisieren">
+			<h:commandButton value="Nutzer Tabelle aktualisieren">
 				<f:ajax render="userTable" event="click" />
 			</h:commandButton>
 			<br />
@@ -50,7 +50,7 @@
 		</h:form>
 		<br />
 		<h:form>
-			<h:outputLabel> Bitte wählen Sie den zu löschenden User aus:</h:outputLabel>
+			<h:outputLabel> Bitte wählen Sie den zu löschenden Nutzer aus:</h:outputLabel>
 			<br />
 			<h:selectOneMenu id="InDelete" value="#{UserEJB.userId}">
 				<f:selectItems id="InDeleteItems" value="#{UserEJB.deleteUsers}"
