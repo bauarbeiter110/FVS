@@ -56,13 +56,6 @@ public class FahrplanEJB {
 		init();
 	}
 
-	
-	public String rerout(){
-		//Weiterleitung an die Fahrplanübersicht einer Haltestelle/ fahrplanId ist in diesem Fall die ID der Haltestelle
-		fahrplaene = verbindungDao.getFarhplaeneByHaltestelleId(fahrplanId);	
-		return "fahrplanSpeziell.xhtml";
-	}
-
 	public String getLinienname() {
 		return linienname;
 	}

@@ -12,28 +12,24 @@
 	<f:view>
 		<h:outputLabel value="Hallo #{SessionUser.sessionUser.name}" />
 		<br />
-		<h:outputLabel value="Die Fahrpläne der von ihnen ausgewählten Haltestelle"/>
+		<h:outputLabel value="Die weiteren Haltestellen auf dieser Linie" />
 		<br />
 		<h:form>
 			<h:dataTable id="haltestellenTable"
-				value="#{FolgehaltestelleEJB.fahrplaene}" var="linie">
+				value="#{FolgehaltestelleEJB.haltestelle}" var="haltestelle">
 				<h:column>
 					<f:facet name="header"> Index</f:facet>
-					<h:outputText value="#{linie.id}" />
+					<h:outputText value="#{haltestelle.id}" />
 				</h:column>
 				<h:column>
 					<f:facet name="header"> Name</f:facet>
-					<h:outputText value="#{linie.linienname}" />
-				</h:column>
-				<h:column>
-					<h:commandButton value="Folgehaltestellen Ansehen" action="#{FolgehaltestelleEJB.toFolgehaltestelle(linie.id)}" />
+					<h:outputText value="#{haltestelle.name}" />
 				</h:column>
 			</h:dataTable>
 			<br />
 		</h:form>
-		<br />
 		<h:form>
-			<h:commandButton value="Zurück" action="haltestelleUebersicht.xhtml" />
+			<h:commandButton value="Zurück" action="navigation.xhtml" />
 		</h:form>
 	</f:view>
 </h:body>
