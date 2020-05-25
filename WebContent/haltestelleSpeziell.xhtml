@@ -16,14 +16,18 @@
 			value="Die Haltestellen der von ihnen ausgewählten Linie '#{FahrplanVerbindungEJB.linienname}'" />
 		<br />
 			<h:dataTable id="haltestellenTable"
-				value="#{FahrplanVerbindungEJB.haltestellen}" var="haltestelle">
+				value="#{FahrplanVerbindungEJB.haltestellen}" var="verb">
 				<h:column>
 					<f:facet name="header"> Index</f:facet>
-					<h:outputText value="#{haltestelle.id}" />
+					<h:outputText value="#{verb.ursprung.id}" />
 				</h:column>
 				<h:column>
 					<f:facet name="header"> Name</f:facet>
-					<h:outputText value="#{haltestelle.name}" />
+					<h:outputText value="#{verb.ursprung.name}" />
+				</h:column>
+				<h:column>
+					<f:facet name="header"> Zeitpunkt</f:facet>
+					<h:outputText value="#{verb.dauer}" />
 				</h:column>
 			</h:dataTable>
 			<br />
