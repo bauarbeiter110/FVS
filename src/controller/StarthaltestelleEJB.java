@@ -11,12 +11,14 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import dao.FahrplanDao;
+import dao.FahrplanVerbindungDao;
 import dao.VerbindungDao;
 import dto.FahrplanDTO;
+import dto.FahrplanVerbindungDTO;
 import dto.VerbindungDTO;
 
 @Named(value = "StarthaltestelleEJB")
-@ApplicationScoped
+@SessionScoped
 public class StarthaltestelleEJB implements Serializable{
 
 	/**
@@ -29,13 +31,18 @@ public class StarthaltestelleEJB implements Serializable{
 	
 	@Inject
 	VerbindungDao verbindungDao;
+	
+	@Inject
+	FahrplanVerbindungDao fahrVerDao;
 
 	// Variablen auf die von der xhtml zugegriffen wird
+	String fahrplanname;
 	int fahrplanId;
 	int nextVerbId;
 	List<VerbindungDTO> verbindungen;
 	int min;
 	int hh;
+	FahrplanDTO fahr;
 	
 	// Beim Seitenaufbau immer durchgeführt.
 	@PostConstruct
@@ -45,20 +52,22 @@ public class StarthaltestelleEJB implements Serializable{
 	}
 	
 	public String fahrplanUebersichtToStarthaltstelle() {
-		
+		fahr = fahrplanDao.getFahrplanById(fahrplanId);
+		fahrplanname = fahr.getLinienname();
 		return "starthaltestelle.xhtml";
 	}
 	
 	public String addStartverbindung(){
 		@SuppressWarnings("deprecation")
 		Time t = new Time(hh, min, 0);
-		FahrplanDTO fahr = fahrplanDao.getFahrplanById(fahrplanId);
+		
 		fahr.setStartzeitpunkt(t);
 		VerbindungDTO verb = verbindungDao.getVerbindungById(nextVerbId);
 		fahr.setStarthaltestelle(verb.getUrsprung());
 		fahr.setZielhaltestelle(verb.getZiel());
 		fahrplanDao.saveFahrplan(fahr);
-		return "fahrplanUebersicht.xhtml";
+		fahrVerDao.saveFahrplanVerbindung(new FahrplanVerbindungDTO(1, fahr, verb));
+		return "navigation.xhtml";
 	}
 	
 	public int getFahrplanId() {
@@ -99,5 +108,13 @@ public class StarthaltestelleEJB implements Serializable{
 
 	public void setHh(int hh) {
 		this.hh = hh;
+	}
+
+	public String getFahrplanname() {
+		return fahrplanname;
+	}
+
+	public void setFahrplanname(String fahrplanname) {
+		this.fahrplanname = fahrplanname;
 	}
 }

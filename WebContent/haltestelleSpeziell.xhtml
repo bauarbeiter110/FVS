@@ -6,14 +6,14 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title><ui:insert name="title">FVS User</ui:insert></title>
+	<title><ui:insert name="title">FVS</ui:insert></title>
 </h:head>
 <h:body>
 	<f:view>
 		<h:outputLabel value="Hallo #{SessionUser.sessionUser.name}" />
 		<br />
 		<h:outputLabel
-			value="Die Haltestellen der von ihnen ausgewählten Linie" />
+			value="Die Haltestellen der von ihnen ausgewählten Linie '#{FahrplanVerbindungEJB.linienname}'" />
 		<br />
 			<h:dataTable id="haltestellenTable"
 				value="#{FahrplanVerbindungEJB.haltestellen}" var="haltestelle">

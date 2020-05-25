@@ -6,7 +6,7 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
 	<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
-	<title><ui:insert name="title">FVS User</ui:insert></title>
+	<title><ui:insert name="title">FVS</ui:insert></title>
 </h:head>
 <h:body>
 	<f:view>
@@ -53,7 +53,7 @@
 					var="OneLinie" itemLabel="#{OneLinie.name}" itemValue="#{OneLinie.id}">
 				</f:selectItems>
 			</h:selectOneMenu>
-			<h:commandButton value="auswählen" action="#{FahrplanEJB.getFahrplanById()}">
+			<h:commandButton value="auswählen" action="#{FahrplanEJB.rerout}">
 				<f:ajax execute="InLinie" render="InLinie" event="click" />
 			</h:commandButton>
 			<br />

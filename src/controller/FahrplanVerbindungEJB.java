@@ -44,10 +44,14 @@ public class FahrplanVerbindungEJB implements Serializable {
 	int linieId;
 	List<HaltestelleDTO> mglNextHalt;
 	List<HaltestelleDTO> haltestellen;
+	FahrplanDTO fahr;
+	String linienname;
 
 	public String fahrplanUebersichtToHaltestelleSpeziell() {
 		haltestellen = verbindungDao.getSortedHaltestellenByFahrplanId(linieId);
-		HaltestelleDTO lastHalt = fahrDao.getFahrplanById(linieId).getZielhaltestelle();
+		fahr = fahrDao.getFahrplanById(linieId);
+		linienname = fahr.getLinienname();
+		HaltestelleDTO lastHalt = fahr.getZielhaltestelle();
 		lastHaltId = lastHalt.getId();
 		mglNextHalt = new ArrayList<HaltestelleDTO>();
 		// Ermittlung der möglichen nächsten Verbindungen
@@ -77,7 +81,6 @@ public class FahrplanVerbindungEJB implements Serializable {
 	}
 
 	public String addVerbindung() {
-		FahrplanDTO fahr = fahrDao.getFahrplanById(linieId);
 		VerbindungDTO ver = verbindungDao.getVerbindungByHaltestellen(haltDao.findHaltestelleById(lastHaltId),
 				haltDao.findHaltestelleById(nextHaltId));
 		FahrplanVerbindungDTO fahrVer = new FahrplanVerbindungDTO(
@@ -136,5 +139,13 @@ public class FahrplanVerbindungEJB implements Serializable {
 
 	public void setMglNextHalt(List<HaltestelleDTO> mglNextHalt) {
 		this.mglNextHalt = mglNextHalt;
+	}
+
+	public String getLinienname() {
+		return linienname;
+	}
+
+	public void setLinienname(String linienname) {
+		this.linienname = linienname;
 	}
 }

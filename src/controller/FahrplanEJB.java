@@ -53,11 +53,11 @@ public class FahrplanEJB {
 
 	public void add() {
 		fahrplanDao.createFahrplan(this.linienname);
-		fahrplaene = fahrplanDao.loadFahrplaene();
+		init();
 	}
 
 	
-	public String getFahrplanById(){
+	public String rerout(){
 		//Weiterleitung an die Fahrplanübersicht einer Haltestelle/ fahrplanId ist in diesem Fall die ID der Haltestelle
 		fahrplaene = verbindungDao.getFarhplaeneByHaltestelleId(fahrplanId);	
 		return "fahrplanSpeziell.xhtml";

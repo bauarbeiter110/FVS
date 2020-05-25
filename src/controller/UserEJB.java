@@ -21,11 +21,19 @@ public class UserEJB {
 	String name;
 	int userId;	
 	List<UserDTO> users;
+	List<UserDTO> deleteUsers;
 	
 	// Beim Seitenaufbau immer durchgeführt.
 	@PostConstruct
 	public void init() {
 		users = userDao.loadUsers();
+		deleteUsers = userDao.loadUsers();
+		for(int i = 0; i<deleteUsers.size();i++) {
+			if(deleteUsers.get(i).getManager()) {
+				deleteUsers.remove(i);
+				i--;
+			}
+		}
 	}
 
 	/** benötigt gebundenen Eingabeparamter #{UserEJB.name}
@@ -33,7 +41,7 @@ public class UserEJB {
 	 */
 	public void add() {
 		userDao.createUser(this.name);
-		users = userDao.loadUsers();
+		init();
 	}
 
 	/** benötigt gebundenen Eingabeparameter #{UserEJB.userID}
@@ -41,7 +49,7 @@ public class UserEJB {
 	 */
 	public void delete() {
 		userDao.deleteUser(userId);	
-		users = userDao.loadUsers();
+		init();
 	}
 
 	public String getName() {
@@ -66,5 +74,13 @@ public class UserEJB {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+
+	public List<UserDTO> getDeleteUsers() {
+		return deleteUsers;
+	}
+
+	public void setDeleteUsers(List<UserDTO> deleteUsers) {
+		this.deleteUsers = deleteUsers;
 	}
 }
