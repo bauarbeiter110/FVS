@@ -56,35 +56,36 @@ public class FahrplanVerbindungEJB implements Serializable {
 		mglNextHalt = new ArrayList<HaltestelleDTO>();
 		// Ermittlung der möglichen nächsten Verbindungen
 		List<VerbindungDTO> verbindungen = verbindungDao.loadVerbindung();
-		
+
 		List<HaltestelleDTO> haltestelle = verbindungDao.getSortedHaltestellenByFahrplanId(linieId);
 		List<Time> times = verbindungDao.getSortedTimeByFahrplanId(linieId);
 		haltestellen = new ArrayList<VerbindungDTO>();
-		haltestellen.add(new VerbindungDTO(fahr.getStartzeitpunkt(), fahr.getStarthaltestelle(), fahr.getStarthaltestelle()));
-		for(int i = 0 ; i <= times.size()-1; i++) {
+		haltestellen.add(
+				new VerbindungDTO(fahr.getStartzeitpunkt(), fahr.getStarthaltestelle(), fahr.getStarthaltestelle()));
+		for (int i = 0; i <= times.size() - 1; i++) {
 			@SuppressWarnings("deprecation")
 			int hh = haltestellen.get(i).getDauer().getHours() + times.get(i).getHours();
 			int mm = haltestellen.get(i).getDauer().getMinutes() + times.get(i).getMinutes();
-			Time t = new Time(hh , mm , 0);
-			haltestellen.add(new VerbindungDTO(t, haltestelle.get(i+1), haltestelle.get(i+1)));
+			Time t = new Time(hh, mm, 0);
+			haltestellen.add(new VerbindungDTO(t, haltestelle.get(i + 1), haltestelle.get(i + 1)));
 		}
-		
-		// Ermittlung der Vorletzten Haltestelle.
-		VerbindungDTO lastVer = verbindungDao.getlastVerbindung(linieId);
-		for (int i = 0; i < verbindungen.size(); i++) {
-			VerbindungDTO ver = verbindungen.get(i);
-			if (ver.getId() == lastVer.getId()) {
-				// Die betrachtete Verbindung ist die letzte Verbindung--> Nichts tun
-			} else {
-				// Die jeweilige mögliche nächste Haltestelle ist immer der Teil der
-				// betrachteten Verbindung die nicht die letzte Haltestelle ist.
-				if (ver.getUrsprung().getId() == lastHaltId) {
-					mglNextHalt.add(ver.getZiel());
-				} else if (ver.getZiel().getId() == lastHaltId) {
-					mglNextHalt.add(ver.getUrsprung());
+
+		// Ermittlung der möglichen weiteren Haltestellen
+		mglNextHalt = haltDao.getHaltestelleByHaltestelle(lastHaltId);
+		// haltestelle enthält alle bisher angefahrenen Haltestellen, diese sollen als
+		// mögliche weitere Ziele ausgeschlossen sein.
+		for(int i = 0; i< haltestelle.size(); i++) {
+			HaltestelleDTO halt = haltestelle.get(i);
+			for(int j = 0; j < mglNextHalt.size(); j++) {
+				if(mglNextHalt.get(j).getId() == halt.getId()) {
+					//Die möglicherweise nächste Haltestelle wird bereits von dieser Linie bedient.
+					mglNextHalt.remove(j);
+					j--;
 				}
+				
 			}
 		}
+		
 		return "haltestelleSpeziell.xhtml";
 	}
 
@@ -96,7 +97,7 @@ public class FahrplanVerbindungEJB implements Serializable {
 		VerbindungDTO ver = verbindungDao.getVerbindungByHaltestellen(haltDao.findHaltestelleById(lastHaltId),
 				haltDao.findHaltestelleById(nextHaltId));
 		FahrplanVerbindungDTO fahrVer = new FahrplanVerbindungDTO(
-				verbindungDao.getSortedHaltestellenByFahrplanId(linieId).size(), fahr, ver);
+				fahrVerDao.getFahrplanVerbindungByFahrplan(linieId).size(), fahr, ver);
 		fahrVerDao.saveFahrplanVerbindung(fahrVer);
 		// Wenn die neue Verbindung gespeichert ist, muss für den Fahrplan noch die
 		// Zielhaltestelle aktualisiert werden.
@@ -106,7 +107,7 @@ public class FahrplanVerbindungEJB implements Serializable {
 			fahr.setZielhaltestelle(ver.getZiel());
 		}
 		fahrDao.saveFahrplan(fahr);
-		return "navigation.xhtml";
+		return "fahrplanUebersicht.xhtml";
 	}
 
 	public String zurueck() {

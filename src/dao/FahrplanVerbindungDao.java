@@ -26,7 +26,7 @@ public class FahrplanVerbindungDao {
 	 */
 	public List<FahrplanVerbindungDTO> loadFahrplanVerbindung() {
 		List<FahrplanVerbindung> fahrplanVerbindung = em
-				.createQuery("SELECT f FROM FahrplanVerbindung f", FahrplanVerbindung.class).getResultList();
+				.createQuery("SELECT f FROM FahrplanVerbindung f ORDER BY f.reinfolge ASC ", FahrplanVerbindung.class).getResultList();
 		List<FahrplanVerbindungDTO> dtos = new ArrayList<FahrplanVerbindungDTO>();
 		fahrplanVerbindung.forEach((fahrVer)-> dtos.add(new FahrplanVerbindungDTO(fahrVer)));
 		return dtos;
